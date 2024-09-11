@@ -1,0 +1,21 @@
+npm create vite@latest
+
+cd painelAmericanos
+
+npm install
+
+cd
+
+ls
+
+build, dps preview, build para empacotar o projeto e o preview pra executar
+
+lib react-dom 
+
+<> e React.Fragment é praticamente a mesma coisa
+
+é possível usar chave única, utilizando (Fragment key)
+
+pasta componente React sempre iniciar com maiusculo
+
+tsx reendenizamos tags HTML e componentes react

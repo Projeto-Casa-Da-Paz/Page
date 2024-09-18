@@ -1,6 +1,7 @@
 import { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { IToken } from '../../interfaces/token'
+import { useLogout } from '../../hooks/useLogout'
 
 //Exemplo enterder undefined ou null
 let Pessoa = {
@@ -10,11 +11,17 @@ let Pessoa = {
 }
 
 interface IProps {
+    [x: string]: any
     children: ReactNode
     token?: IToken | null
+    onLogout?: () => void
 }
 
 export const LayoutDashboard = (props: IProps) => {
+
+    const defaultLogout = useLogout()
+    const handleLogout = props.onLogout || defaultLogout
+
     return (
         <>
 
@@ -40,11 +47,16 @@ export const LayoutDashboard = (props: IProps) => {
                 <div className="w-100"></div>
                 <div className="navbar-nav">
                     <div className="nav-item text-nowrap">
-                        <Link
+                        <a
                             className="nav-link px-3"
-                            to="/">
+                            href="#"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                handleLogout();
+                            }}
+                        >
                             Sair
-                        </Link>
+                        </a>
                     </div>
                 </div>
             </header>
@@ -56,21 +68,15 @@ export const LayoutDashboard = (props: IProps) => {
                         className="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse"
                     >
                         <div className="position-sticky pt-3">
+
                             <ul className="nav flex-column">
+
                                 <li className="nav-item">
                                     <Link
                                         className={`nav-link`}
                                         to={'/dashboard'}
                                     >
                                         Dashboard
-                                    </Link>
-                                </li>
-                                <li className="nav-item">
-                                    <Link
-                                        className={`nav-link`}
-                                        to={'/usuarios'}
-                                    >
-                                        Users
                                     </Link>
                                 </li>
 

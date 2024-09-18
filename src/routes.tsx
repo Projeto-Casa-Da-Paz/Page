@@ -6,10 +6,6 @@ import {
 } from "react-router-dom"
 import Login from "./pages/Login"
 import Dashboard from "./pages/Dashboard"
-import Produto from "./pages/Produto"
-import PageExemplo from "./pages/PageExemplo"
-import Usuarios from "./pages/Usuarios"
-import GerenciarUsuarios from "./pages/Usuarios/Gerenciar"
 
 export const Rotas = () => {
 
@@ -28,44 +24,6 @@ export const Rotas = () => {
                     path="/dashboard"
                     element={
                         <Dashboard />
-                    }
-                />
-
-                <Route
-                    path="/produto/:id"
-                    element={
-                        <Produto />
-                    }
-                />
-
-                <Route
-                    path="/usuarios"
-                    element={<Usuarios />}
-                />
-                
-                <Route
-                    path="/usuarios/:id"
-                    element={<GerenciarUsuarios />}
-                />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                <Route
-                    path='/example'
-                    element={
-                        <PageExemplo />
                     }
                 />
 

@@ -3,10 +3,12 @@ import { LayoutDashboard } from "../../components/LayoutDashboard";
 import { IToken } from "../../interfaces/token";
 import { verificaTokenExpirado } from "../../services/token";
 import { useNavigate } from "react-router-dom";
+import { useLogout } from "../../hooks/useLogout";
 
 export default function Dashboard() {
     
     const navigate = useNavigate()
+    const logout = useLogout()
 
     // Inicio, Update State, Destruir
     useEffect(() => {
@@ -23,16 +25,13 @@ export default function Dashboard() {
         if (!token || verificaTokenExpirado(token.accessToken)) {
 
             navigate("/")
-        }
-
-        console.log("Pode desfrutar do sistema :D")
-        
+        }        
 
     }, [])
 
     return(
-        <LayoutDashboard>
-            <h1>Graficos</h1>
+        <LayoutDashboard onLogout={logout}>
+            <h1>Gráficos</h1>
         </LayoutDashboard>
     )
 }

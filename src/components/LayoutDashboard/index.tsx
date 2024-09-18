@@ -80,6 +80,15 @@ export const LayoutDashboard = (props: IProps) => {
                                     </Link>
                                 </li>
 
+                                <li className="nav-item">
+                                    <Link
+                                        className={`nav-link`}
+                                        to={'/premios'}
+                                    >
+                                        Prêmios
+                                    </Link>
+                                </li>
+
                             </ul>
                         </div>
                     </nav>

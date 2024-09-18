@@ -6,6 +6,8 @@ import {
 } from "react-router-dom"
 import Login from "./pages/Login"
 import Dashboard from "./pages/Dashboard"
+import GerenciarPremios from "./pages/Premios/Gerenciar"
+import Premios from "./pages/Premios"
 
 export const Rotas = () => {
 
@@ -27,9 +29,21 @@ export const Rotas = () => {
                     }
                 />
 
+                <Route
+                    path="/premios"
+                    element={
+                        <Premios />
+                    }
+                />
+
+                <Route
+                    path="/premios/:id"
+                    element={<GerenciarPremios />}
+                />
+
             </Routes>
 
-        </BrowserRouter>
+        </BrowserRouter >
     )
 
 }

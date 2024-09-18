@@ -7,6 +7,14 @@
             "nome": "Adenilson",
             "permissoes": "admin"
         }
-
+    ],
+    "premios_teste": [
+        {
+            "id": 1,
+            "nome": "nobel teste",
+            "categoria": "oscar",
+            "data_recebimento": "2024-09-17",
+            "imagem": "sim"
+        }
     ]
 }

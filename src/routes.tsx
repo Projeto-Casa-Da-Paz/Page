@@ -8,6 +8,7 @@ import Login from "./pages/Login"
 import Dashboard from "./pages/Dashboard"
 import GerenciarPremios from "./pages/Premios/Gerenciar"
 import Premios from "./pages/Premios"
+import ExampleMui from "./pages/ExampleMui"
 
 export const Rotas = () => {
 
@@ -39,6 +40,11 @@ export const Rotas = () => {
                 <Route
                     path="/premios/:id"
                     element={<GerenciarPremios />}
+                />
+
+                <Route
+                    path="/exampleMui"
+                    element={<ExampleMui />}
                 />
 
             </Routes>

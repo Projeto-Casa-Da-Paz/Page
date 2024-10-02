@@ -11,6 +11,10 @@
     "server": "npx json-server ./jsonserver/db.json --port 3001 -m ./node_modules/json-server-auth"
   },
   "dependencies": {
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@mui/icons-material": "^6.1.1",
+    "@mui/material": "^6.1.1",
     "@types/jsonwebtoken": "^9.0.6",
     "axios": "^1.7.4",
     "bootstrap": "^5.3.3",

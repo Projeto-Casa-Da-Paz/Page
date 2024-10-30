@@ -1,18 +1,17 @@
 'use client'
+import Link from "next/link";
+import styled from "styled-components"
 
-import { link } from 'fs';
-import Link from 'next/link';
-import styled from 'styled-components'
 
 export const NavbarContainer = styled.nav`
     width: 100%;
     height: 80px;
-    background-color: var(--black); //essa váriavel vem do global.ts
+    background-color: var(--black);
     display: flex;
     flex-direction: column;
-    //justify-content: center;
-    //align-items: center;
+
 `;
+
 
 export const LeftContainer = styled.div`
   flex: 70%;
@@ -61,11 +60,12 @@ export const NavbarExtendedContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-
+  
   @media (min-width: 700px) {
-    display: none;
-  }
+      display: none;
+    }
 `;
+
 
 export const NavbarLink = styled(Link)`
   color: var(--text-title);
@@ -92,3 +92,4 @@ export const NavbarLinkExtended = styled(Link)`
     color: var(--red);
   }
 `;
+

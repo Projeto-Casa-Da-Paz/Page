@@ -11,12 +11,17 @@
   "dependencies": {
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
-    "@mui/base": "^5.0.0-beta.58",
-    "@mui/icons-material": "^6.1.2",
-    "@mui/material": "^6.1.2",
+    "@fontsource/inter": "^5.1.0",
+    "@mui/base": "^5.0.0-beta.60",
+    "@mui/joy": "^5.0.0-beta.48",
+    "@types/styled-components": "^5.1.34",
+    "axios": "^1.7.7",
+    "json-server": "^1.0.0-beta.3",
     "next": "14.2.14",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "styled-components": "^6.1.13",
+    "swr": "^2.2.5"
   },
   "devDependencies": {
     "@types/node": "^20",

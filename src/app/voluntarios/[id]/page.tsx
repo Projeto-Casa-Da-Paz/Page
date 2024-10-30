@@ -1,14 +1,12 @@
-"use client";
+"use client"
 
 export default function Dinamico(
     { params }: { params: { id: string } }
 ) {
 
-    console.log("Jesus da Marvel")
+    console.log("vamos amanha na casa da paz")
 
     return (
-        <h1>
-            Voluntários {params.id}
-        </h1>
+        <h1>Voluntarios {params.id}</h1>
     )
 }

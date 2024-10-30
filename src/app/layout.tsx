@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Navigation from "@/components/Navigation";
 import ThemeRegistry from "@/components/ThemeRegistry";
 import '@fontsource/inter';
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Casa da Paz",
@@ -23,10 +24,20 @@ export default function RootLayout({
         <title>{String(metadata.title) ?? ""}</title>
         <meta name="description" content={metadata.description ?? ""} />
       </head>
-      <body suppressHydrationWarning={true}>
+      <body
+        suppressHydrationWarning={true}
+        style=
+        {{
+          display: 'flex',
+          flexDirection: 'column',
+          minHeight: '100vh'
+        }}>
         <ThemeRegistry>
           <Navigation />
-          {children}
+          <div style={{ flex: 1 }}> {/* Isso faz o conteúdo principal ocupar o espaço disponível */}
+            {children}
+          </div>
+          <Footer />
         </ThemeRegistry>
       </body>
     </html>

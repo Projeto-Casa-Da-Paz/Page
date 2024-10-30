@@ -1,38 +1,42 @@
-'use client'
+// src/components/Footer.tsx
 
-import Link from 'next/link';
 import React from 'react';
-import styled from 'styled-components';
+import { Box, Container, Typography, Link } from '@mui/material';
+import { footerStyles, containerStyles, typographyStyles, linksContainerStyles } from './FooterStyles';
 
-const FooterContainer = styled.footer`
-
-  background-color: #f8f9fa;
-  padding: 20px;
-  text-align: center;
-  border-top: 1px solid #e9ecef;
-`;
-
-const FooterLinks = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin-bottom: 10px;
-`;
-
-const FooterText = styled.p`
-  font-size: 14px;
-  color: #6c757d;
-`;
-
-export const Footer = () => {
-    return (
-        <FooterContainer>
-            <FooterLinks>
-                <Link href="/privacidade">Política de Privacidade</Link>
-                <Link href="/termos">Termos de Serviço</Link>
-                <Link href="/contato">Contato</Link>
-            </FooterLinks>
-            <FooterText>© 2024 Casa Da Paz. Todos os direitos reservados.</FooterText>
-        </FooterContainer>
-    );
-};
+export default function Footer() {
+  return (
+    <Box
+      component="footer"
+      sx={{
+        ...footerStyles,
+        position: 'relative', // Alterado para relativo
+        bottom: 0,
+        width: '100%',
+      }}
+    >
+      <Container maxWidth="lg" sx={containerStyles}>
+        <Typography variant="body1" sx={typographyStyles}>
+          Casa da Paz - Todos os direitos reservados © {new Date().getFullYear()}
+        </Typography>
+        <Box sx={linksContainerStyles}>
+          <Link href="/" color="inherit" underline="hover">
+            Home
+          </Link>
+          <Link href="/sobre" color="inherit" underline="hover">
+            Sobre Nós
+          </Link>
+          <Link href="/como-ajudar" color="inherit" underline="hover">
+            Como Ajudar
+          </Link>
+          <Link href="/eventos" color="inherit" underline="hover">
+            Eventos
+          </Link>
+          <Link href="/casa-da-paz" color="inherit" underline="hover">
+            A Casa da Paz
+          </Link>
+        </Box>
+      </Container>
+    </Box>
+  );
+}

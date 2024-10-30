@@ -7,13 +7,15 @@ import {
   Drawer,
   IconButton,
   List,
+  ListItem,
   ListItemText,
   Toolbar,
   Typography,
   Button,
+  Menu,
+  MenuItem,
   useMediaQuery,
   useTheme,
-  ListItem,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import Link from 'next/link';
@@ -21,14 +23,41 @@ import { usePathname } from 'next/navigation';
 
 const navigationItems = [
   { text: 'Home', href: '/' },
-  { text: 'Sobre Nós', href: '/sobre' },
-  { text: 'Como Ajudar', href: '/como-ajudar' },
-  { text: 'Eventos', href: '/eventos' },
-  { text: 'A Casa da Paz', href: '/casa-da-paz' },
+  {
+    text: 'Sobre Nós',
+    submenu: [
+      { text: 'História', href: '/sobre/historia' },
+      { text: 'Documentos Oficiais', href: '/sobre/documentos' },
+      { text: 'Parcerias e Colaboradores', href: '/sobre/parcerias' },
+    ]
+  },
+  {
+    text: 'Como Ajudar',
+    submenu: [
+      { text: 'Doações', href: '/como-ajudar/doacoes' },
+      { text: 'Voluntários', href: '/como-ajudar/voluntarios' },
+    ]
+  },
+  {
+    text: 'Eventos',
+    submenu: [
+      { text: 'Bazar', href: '/eventos/bazar' },
+      { text: 'Galeria', href: '/eventos/galeria' },
+    ]
+  },
+  {
+    text: 'A Casa da Paz',
+    submenu: [
+      { text: 'Contato', href: '/casa-da-paz/contato' },
+      { text: 'Prêmios/Certificados', href: '/casa-da-paz/premios' },
+    ]
+  },
 ];
 
 export default function Navigation() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [openSubMenu, setOpenSubMenu] = useState<string | null>(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const pathname = usePathname();
@@ -37,21 +66,61 @@ export default function Navigation() {
     setMobileOpen(!mobileOpen);
   };
 
+  const handleSubMenuOpen = (event: React.MouseEvent<HTMLElement>, itemText: string) => {
+    setAnchorEl(event.currentTarget);
+    setOpenSubMenu(itemText);
+  };
+
+  const handleSubMenuClose = () => {
+    setAnchorEl(null);
+    setOpenSubMenu(null);
+  };
+
   const drawer = (
     <List>
       {navigationItems.map((item) => (
-        <ListItem
-          key={item.text}
-          component={Link}
-          href={item.href}
-          sx={{
-            ...(pathname === item.href && {
-              backgroundColor: 'rgba(25, 118, 210, 0.08)',
-            }),
-          }}
-        >
-          <ListItemText primary={item.text} />
-        </ListItem>
+        item.submenu ? (
+          <React.Fragment key={item.text}>
+            <ListItem
+              onMouseEnter={(e) => handleSubMenuOpen(e, item.text)}
+              onMouseLeave={handleSubMenuClose}
+            >
+              <ListItemText primary={item.text} />
+            </ListItem>
+            <Menu
+              anchorEl={anchorEl}
+              open={openSubMenu === item.text}
+              onClose={handleSubMenuClose}
+              MenuListProps={{
+                onMouseLeave: handleSubMenuClose,
+              }}
+            >
+              {item.submenu.map((subItem) => (
+                <MenuItem
+                  key={subItem.text}
+                  component={Link}
+                  href={subItem.href}
+                  onClick={handleSubMenuClose}
+                >
+                  {subItem.text}
+                </MenuItem>
+              ))}
+            </Menu>
+          </React.Fragment>
+        ) : (
+          <ListItem
+            key={item.text}
+            component={Link}
+            href={item.href}
+            sx={{
+              ...(pathname === item.href && {
+                backgroundColor: 'rgba(25, 118, 210, 0.08)',
+              }),
+            }}
+          >
+            <ListItemText primary={item.text} />
+          </ListItem>
+        )
       ))}
     </List>
   );
@@ -76,17 +145,53 @@ export default function Navigation() {
           {!isMobile && (
             <Box sx={{ display: 'flex', gap: 2 }}>
               {navigationItems.map((item) => (
-                <Button
-                  key={item.text}
-                  color="inherit"
-                  component={Link}
-                  href={item.href}
-                  sx={{
-                    backgroundColor: pathname === item.href ? 'rgba(255, 255, 255, 0.12)' : 'transparent',
-                  }}
-                >
-                  {item.text}
-                </Button>
+                item.submenu ? (
+                  <div
+                    key={item.text}
+                    onMouseEnter={(e) => handleSubMenuOpen(e, item.text)}
+                    onMouseLeave={handleSubMenuClose}
+                  >
+                    <Button
+                      color="inherit"
+                      sx={{
+                        backgroundColor: openSubMenu === item.text ? 'rgba(255, 255, 255, 0.12)' : 'transparent',
+                      }}
+                    >
+                      {item.text}
+                    </Button>
+                    <Menu
+                      anchorEl={anchorEl}
+                      open={openSubMenu === item.text}
+                      onClose={handleSubMenuClose}
+                      MenuListProps={{
+                        onMouseLeave: handleSubMenuClose,
+                      }}
+                    >
+                      {item.submenu.map((subItem) => (
+                        <MenuItem
+                          key={subItem.text}
+                          component={Link}
+                          href={subItem.href}
+                          onClick={handleSubMenuClose}
+                        >
+                          {subItem.text}
+                        </MenuItem>
+                      ))}
+                    </Menu>
+                  </div>
+                ) : (
+                  <Button
+                    key={item.text}
+                    color="inherit"
+                    component={Link}
+                    href={item.href}
+                    sx={{
+                      backgroundColor: pathname === item.href ? 'rgba(255, 255, 255, 0.12)' : 'transparent',
+                    }}
+                  >
+                    {item.text}
+                  </Button>
+                )
               ))}
             </Box>
           )}

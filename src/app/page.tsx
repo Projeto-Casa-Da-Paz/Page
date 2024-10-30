@@ -1,37 +1,18 @@
-import { Card } from "@/components/Card";
-import { Menu } from "@/components/Menu";
-import { Footer } from "@/components/Footer";
+"use client";
 
+import { Container, Typography, Paper } from '@mui/material';
 
 export default function Home() {
   return (
-    <>
-      <Menu />
-
-      <div
-        style={{
-          paddingLeft: '6%',
-          paddingRight: '6%',
-          height: '100vh'
-        }}
-      >
-        <h2> Página Inicial </h2>
-
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            flexWrap: 'wrap',
-            //Ajuste auto de itens= wrap
-          }}
-        >
-          {/* Card */}
-
-        </div>
-      </div>
-
-      <Footer />
-
-    </>
+    <Container maxWidth="lg" sx={{ mt: 4 }}>
+      <Paper elevation={3} sx={{ p: 4 }}>
+        <Typography variant="h3" component="h1" gutterBottom>
+          Bem-vindo à Casa da Paz
+        </Typography>
+        <Typography variant="body1" paragraph>
+          Conteúdo da página inicial...
+        </Typography>
+      </Paper>
+    </Container>
   );
 }

@@ -1,43 +1,85 @@
 "use client";
 
-import { Grid3x3 } from '@mui/icons-material';
-import { Card, CardContent, Typography, Grid } from '@mui/material';
+import { useState, useEffect } from 'react';
+import { Box, Card, CardContent, Typography } from '@mui/material';
+import Grid from "@mui/material/Grid2"; // Grid v2
+
+interface Premio {
+  id: number;
+  nome: string;
+  categoria: string;
+  data_recebimento: string;
+  imagem: string;
+}
 
 const PremiosCertificados = () => {
+  const [premios, setPremios] = useState<Premio[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchPremios = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/premios');
+        if (!response.ok) {
+          throw new Error('Erro ao carregar os prêmios');
+        }
+        const data = await response.json() as Premio[];
+        setPremios(data);
+      } catch (error) {
+        // Tratamento adequado do erro com type narrowing
+        if (error instanceof Error) {
+          setError(error.message);
+        } else {
+          setError('Ocorreu um erro desconhecido');
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPremios();
+  }, []);
+
+  if (loading) return <Typography>Carregando...</Typography>;
+  if (error) return <Typography color="error">{error}</Typography>;
+
   return (
-    <Card sx={{ maxWidth: 345, margin: 2 }}>
-      <CardContent>
-        <Typography variant="h4" component="div">
-          Prêmios e Certificados
+    <>
+      <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column" gap={2} sx={{ mt: 4 }} >
+        <Typography variant="h3" component="h1" gutterBottom>
+          Premios e Certificados
         </Typography>
-        <Grid container spacing={6}>
-          <Grid item xs={12} sm={6}>
-            <Typography variant="body1" color="text.secondary">
-              Prêmio 1
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Descrição do prêmio 1
-            </Typography>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <Typography variant="body1" color="text.secondary">
-              Prêmio 2
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Descrição do prêmio 2
-            </Typography>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <Typography variant="body1" color="text.secondary">
-              Prêmio 2
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Descrição do prêmio 2
-            </Typography>
-          </Grid>
+        <Grid container spacing={{ xs: 2, md: 2 }} columns={{ xs: 4, sm: 8, md: 12 }} >
+          {premios.map((premio: Premio) => (
+            <Grid display="flex" justifyContent="center" alignItems="center" key={premio.id} sx={{ gap: 5 }} size={{ md: 4, sm: 12, xs: 4 }}>
+              <CardContent sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 2, textAlign: 'center' }} >
+                <img
+                  src={premio.imagem}
+                  alt={premio.nome}
+                  style={{
+                    width: '100%',
+                    height: 'auto',
+                    maxHeight: '200px',
+                    objectFit: 'contain'
+                  }}
+                />
+                <Typography variant="h6" component="h2">
+                  {premio.nome}
+                </Typography>
+                <Typography color="textSecondary">
+                  Categoria: {premio.categoria}
+                </Typography>
+                <Typography variant="body2">
+                  Data de Recebimento: {new Date(premio.data_recebimento).toLocaleDateString('pt-BR')}
+                </Typography>
+              </CardContent>
+            </Grid>
+          ))}
         </Grid>
-      </CardContent>
-    </Card>
+      </Box>
+
+    </>
   );
 };
 

@@ -17,7 +17,9 @@ export default function Footer() {
     >
       <Container maxWidth="lg" sx={containerStyles}>
         <Typography variant="body1" sx={typographyStyles}>
-          Casa da Paz - Todos os direitos reservados © {new Date().getFullYear()}
+          Casa da Paz - Todos os direitos reservados © |
+          Desenvolvido em parceria com a Faculdade ALFA Umuarama
+          {new Date().getFullYear()}
         </Typography>
         <Box sx={linksContainerStyles}>
           <Link href="/" color="inherit" underline="hover">

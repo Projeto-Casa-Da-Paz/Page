@@ -10,7 +10,6 @@ export default function Home() {
           Bem-vindo à Casa da Paz
         </Typography>
         <Typography variant="body1" paragraph>
-          Conteúdo da página inicial...
         </Typography>
       </Paper>
     </Container>

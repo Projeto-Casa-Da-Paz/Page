@@ -24,11 +24,10 @@ import { usePathname } from 'next/navigation';
 const navigationItems = [
   { text: 'Home', href: '/' },
   {
-    text: 'Sobre Nós',
+    text: 'Casa da Paz',
     submenu: [
-      { text: 'História', href: '/sobre/historia' },
-      { text: 'Documentos Oficiais', href: '/sobre/documentos' },
-      { text: 'Parcerias e Colaboradores', href: '/sobre/parcerias' },
+      { text: 'Contato', href: '/casa-da-paz/contato' },
+      { text: 'Prêmios', href: '/casa-da-paz/premios' },
     ]
   },
   {
@@ -44,14 +43,7 @@ const navigationItems = [
       { text: 'Bazar', href: '/eventos/bazar' },
       { text: 'Galeria', href: '/eventos/galeria' },
     ]
-  },
-  {
-    text: 'A Casa da Paz',
-    submenu: [
-      { text: 'Contato', href: '/casa-da-paz/contato' },
-      { text: 'Prêmios/Certificados', href: '/casa-da-paz/premios' },
-    ]
-  },
+  }
 ];
 
 export default function Navigation() {

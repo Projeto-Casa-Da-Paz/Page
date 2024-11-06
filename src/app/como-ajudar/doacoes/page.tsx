@@ -14,7 +14,7 @@ import {
   Divider
 } from '@mui/material';
 
-interface IVoluntario {
+interface IDoacoes {
   nome: string;
   email: string;
   telefone: string;
@@ -28,7 +28,7 @@ interface IErrors {
   data_nascimento?: string;
 }
 
-const defaultVoluntario: IVoluntario = {
+const defaultDoacoes: IDoacoes = {
   nome: '',
   email: '',
   telefone: '',
@@ -36,7 +36,7 @@ const defaultVoluntario: IVoluntario = {
 };
 
 export default function Voluntarios() {
-  const [formData, setFormData] = useState<IVoluntario>(defaultVoluntario);
+  const [formData, setFormData] = useState<IDoacoes>(defaultDoacoes);
   const [errors, setErrors] = useState<IErrors>({});
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -74,7 +74,7 @@ export default function Voluntarios() {
 
     if (validateForm()) {
       try {
-        const response = await fetch('http://localhost:3001/voluntarios', {
+        const response = await fetch('http://localhost:3001/doacaos', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -95,7 +95,7 @@ export default function Voluntarios() {
           severity: 'success'
         });
 
-        setFormData(defaultVoluntario);
+        setFormData(defaultDoacoes);
       } catch (error) {
         console.error('Erro:', error);
         setSnackbar({

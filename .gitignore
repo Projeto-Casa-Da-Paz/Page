@@ -34,3 +34,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Ignorar pasta de imagens da galeria
+public/imagens/galeria/fotos/
+
+# Ignorar arquivos de imagem específicos na pasta da galeria
+public/imagens/galeria/fotos/*.jpg
+public/imagens/galeria/fotos/*.jpeg
+public/imagens/galeria/fotos/*.png
+public/imagens/galeria/fotos/*.gif

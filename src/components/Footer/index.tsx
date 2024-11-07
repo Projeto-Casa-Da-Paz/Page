@@ -1,4 +1,4 @@
-// src/components/Footer.tsx
+'use client'
 
 import React from 'react';
 import { Box, Container, Typography, Link as MuiLink } from '@mui/material';

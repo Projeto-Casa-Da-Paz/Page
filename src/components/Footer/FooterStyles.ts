@@ -1,4 +1,4 @@
-// src/components/FooterStyles.ts
+'use client'
 
 import { SxProps } from '@mui/material';
 
@@ -7,7 +7,7 @@ export const footerStyles: SxProps = {
   color: 'white',
   py: 4,
   mt: 'auto',
-  borderTop: '2px solid rgba(255, 255, 255, 0.2)', // Adiciona uma borda superior
+  borderTop: '2px solid rgba(255, 255, 255, 0.2)',
 };
 
 export const containerStyles: SxProps = {
@@ -15,7 +15,7 @@ export const containerStyles: SxProps = {
 };
 
 export const typographyStyles: SxProps = {
-  mb: 2,
+  mb: 0,
   fontSize: { xs: '0.875rem', md: '1rem' },
 };
 

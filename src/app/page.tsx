@@ -10,7 +10,7 @@ export default function Home() {
   return (
 
     <Box textAlign="center" justifyContent="center" sx={{ p: 3 }} >
-      <Typography variant="h3" component="h1" gutterBottom sx={{ mt: 4 }}>
+      <Typography variant="h3" component="h1" gutterBottom sx={{ mt: 2 }}>
         Bem-vindo à Casa da Paz
       </Typography>
 

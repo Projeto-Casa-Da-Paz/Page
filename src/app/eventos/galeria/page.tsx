@@ -1,96 +1,120 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import { Box, Typography, Grid, Card, CardMedia, CircularProgress } from "@mui/material";
-import Image from 'next/image';
+import { Card } from "@mui/material";
+import { useState, useEffect } from "react";
 
-interface Photo {
+interface Galeria {
   id: number;
-  src: string;
-  alt: string;
+  nome: string;
+  data: string;
+  local: string;
 }
 
-const PhotoGallery = () => {
-  const [photos, setPhotos] = useState<Photo[]>([]);
+const GaleriaView = () => {
+  const [galerias, setGalerias] = useState<Galeria[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchPhotos = async () => {
+    const fetchGalerias = async () => {
       try {
-        const response = await fetch('http://localhost:3001/fotos');
+        const response = await fetch('http://127.0.0.1:8000/api/galerias', {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+        }); 
+
         if (!response.ok) {
-          throw new Error('Falha ao carregar as fotos');
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
+
         const data = await response.json();
-        setPhotos(data);
+        setGalerias(data);
+
       } catch (err) {
-        setError('Erro ao carregar as fotos. Por favor, tente novamente mais tarde.');
-        console.error('Erro:', err);
+        let errorMessage = 'Erro ao carregar as galerias. Por favor, tente novamente mais tarde.';
+
+        if (err instanceof TypeError && err.message === 'Failed to fetch') {
+          errorMessage = 'Não foi possível conectar ao servidor. Verifique sua conexão.';
+        }
+
+        setError(errorMessage);
+        console.error('Erro detalhado:', err);
+
       } finally {
         setLoading(false);
       }
     };
 
-    fetchPhotos();
+    fetchGalerias();
   }, []);
 
   if (loading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="60vh">
-        <CircularProgress />
-      </Box>
+      <div className="flex justify-center items-center min-h-[60vh]">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+      </div>
     );
   }
 
   if (error) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="60vh">
-        <Typography color="error">{error}</Typography>
-      </Box>
+      <div className="flex justify-center items-center min-h-[60vh]">
+        <p className="text-red-500">{error}</p>
+      </div>
     );
   }
 
   return (
-    <Box sx={{ p: 4 }}>
-      <Typography variant="h3" component="h1" gutterBottom textAlign="center">
-        Galeria de Fotos
-      </Typography>
+    <div className="p-4">
+      <h1 className="text-3xl font-bold text-center mb-8">Nossas Galerias</h1>
 
-      <Grid container spacing={2}>
-        {photos.map((photo) => (
-          <Grid item key={photo.id} xs={12} sm={6} md={4} lg={3}>
-            <Card
-              sx={{
-                height: '300px',
-                position: 'relative',
-                overflow: 'hidden',
-                transition: 'transform 0.2s',
-                '&:hover': {
-                  transform: 'scale(1.02)',
-                  cursor: 'pointer',
-                  boxShadow: 6
-                }
-              }}
-            >
-              <Box sx={{ position: 'relative', width: '100%', height: '100%' }}>
-                <Image
-                  src={photo.src}
-                  alt={photo.alt}
-                  fill
-                  style={{
-                    objectFit: 'cover',
-                  }}
-                  sizes="(max-width: 600px) 100vw, (max-width: 960px) 50vw, 33vw"
-                  priority={photo.id <= 4} // Carrega as primeiras 4 imagens com prioridade
-                />
-              </Box>
-            </Card>
-          </Grid>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {galerias.map((galeria) => (
+          <Card
+            key={galeria.id}
+            className="overflow-hidden hover:shadow-lg transition-shadow duration-300"
+          >
+            {/* Placeholder para imagem */}
+            <div className="h-48 bg-gray-200 relative">
+              <div className="absolute inset-0 flex items-center justify-center text-gray-500">
+                <span className="text-lg">{galeria.nome}</span>
+              </div>
+            </div>
+
+            <div className="p-4 space-y-2">
+              <h3 className="font-semibold text-xl text-gray-800">{galeria.nome}</h3>
+              <div className="text-sm text-gray-600 space-y-1">
+                <p>
+                  <span className="font-medium">Data: </span>
+                  {new Date(galeria.data).toLocaleDateString('pt-BR')}
+                </p>
+                <p>
+                  <span className="font-medium">Local: </span>
+                  {galeria.local}
+                </p>
+              </div>
+
+              <button
+                className="mt-4 w-full py-2 text-center text-blue-600 hover:text-blue-800 transition-colors duration-200"
+                onClick={() => window.location.href = `/galeria/${galeria.id}`}
+              >
+                Ver Galeria →
+              </button>
+            </div>
+          </Card>
         ))}
-      </Grid>
-    </Box>
+      </div>
+
+      {galerias.length === 0 && !loading && !error && (
+        <div className="text-center text-gray-500 mt-8">
+          Nenhuma galeria encontrada.
+        </div>
+      )}
+    </div>
   );
 };
 
-export default PhotoGallery;
+export default GaleriaView;

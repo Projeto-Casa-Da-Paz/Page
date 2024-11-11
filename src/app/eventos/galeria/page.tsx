@@ -1,120 +1,122 @@
+// GaleriaEventos.tsx
 "use client";
-
-import { Card } from "@mui/material";
-import { useState, useEffect } from "react";
+import React from 'react';
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+  Grid,
+  Container,
+  Box,
+  Button,
+  CardActionArea
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { useRouter } from 'next/navigation';
 
 interface Galeria {
   id: number;
   nome: string;
   data: string;
   local: string;
+  fotos: string[];
 }
 
-const GaleriaView = () => {
-  const [galerias, setGalerias] = useState<Galeria[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+const EventCard = styled(Card)(({ theme }) => ({
+  height: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  transition: 'transform 0.2s',
+  '&:hover': {
+    transform: 'scale(1.02)',
+  },
+}));
 
-  useEffect(() => {
-    const fetchGalerias = async () => {
-      try {
-        const response = await fetch('http://127.0.0.1:8000/api/galerias', {
-          method: 'GET',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          },
-        }); 
+const GaleriaEventos = () => {
+  const router = useRouter();
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
+  // Dados de exemplo com múltiplas fotos por evento
+  const eventos: Galeria[] = [
+    {
+      id: 1,
+      nome: "Evento Casa da Paz",
+      data: "2024-03-15",
+      local: "Casa da Paz",
+      fotos: [
+        '/imagens/casa-da-paz-home.jpg',
+        '/imagens/casa-da-paz-home.jpg',
+        '/imagens/casa-da-paz-home.jpg',
+        '/imagens/casa-da-paz-home.jpg',
+        '/imagens/casa-da-paz-home.jpg',
+        '/imagens/casa-da-paz-home.jpg',
+      ]
+    },
+    {
+      id: 2,
+      nome: "Campanha Solidária",
+      data: "2024-03-20",
+      local: "Centro Comunitário",
+      fotos: [
+        '/imagens/casa-da-paz-home.jpg',
+        '/imagens/casa-da-paz-home.jpg',
+        '/imagens/casa-da-paz-home.jpg',
+        '/imagens/casa-da-paz-home.jpg',
+        '/imagens/casa-da-paz-home.jpg',
+        '/imagens/casa-da-paz-home.jpg',
+        '/imagens/casa-da-paz-home.jpg',
+        '/imagens/casa-da-paz-home.jpg',
+        '/imagens/casa-da-paz-home.jpg',
+        '/imagens/casa-da-paz-home.jpg',
+        '/imagens/casa-da-paz-home.jpg',
+      ]
+    },
+    // Adicione mais eventos conforme necessário
+  ];
 
-        const data = await response.json();
-        setGalerias(data);
-
-      } catch (err) {
-        let errorMessage = 'Erro ao carregar as galerias. Por favor, tente novamente mais tarde.';
-
-        if (err instanceof TypeError && err.message === 'Failed to fetch') {
-          errorMessage = 'Não foi possível conectar ao servidor. Verifique sua conexão.';
-        }
-
-        setError(errorMessage);
-        console.error('Erro detalhado:', err);
-
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchGalerias();
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex justify-center items-center min-h-[60vh]">
-        <p className="text-red-500">{error}</p>
-      </div>
-    );
-  }
+  const handleEventClick = (eventoId: number) => {
+    router.push(`/eventos/${eventoId}`);
+  };
 
   return (
-    <div className="p-4">
-      <h1 className="text-3xl font-bold text-center mb-8">Nossas Galerias</h1>
+    <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Typography variant="h4" component="h2" gutterBottom sx={{ mb: 4 }}>
+        Galeria de Eventos
+      </Typography>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {galerias.map((galeria) => (
-          <Card
-            key={galeria.id}
-            className="overflow-hidden hover:shadow-lg transition-shadow duration-300"
-          >
-            {/* Placeholder para imagem */}
-            <div className="h-48 bg-gray-200 relative">
-              <div className="absolute inset-0 flex items-center justify-center text-gray-500">
-                <span className="text-lg">{galeria.nome}</span>
-              </div>
-            </div>
-
-            <div className="p-4 space-y-2">
-              <h3 className="font-semibold text-xl text-gray-800">{galeria.nome}</h3>
-              <div className="text-sm text-gray-600 space-y-1">
-                <p>
-                  <span className="font-medium">Data: </span>
-                  {new Date(galeria.data).toLocaleDateString('pt-BR')}
-                </p>
-                <p>
-                  <span className="font-medium">Local: </span>
-                  {galeria.local}
-                </p>
-              </div>
-
-              <button
-                className="mt-4 w-full py-2 text-center text-blue-600 hover:text-blue-800 transition-colors duration-200"
-                onClick={() => window.location.href = `/galeria/${galeria.id}`}
-              >
-                Ver Galeria →
-              </button>
-            </div>
-          </Card>
+      <Grid container spacing={3}>
+        {eventos.map((evento) => (
+          <Grid item key={evento.id} xs={12} sm={6} md={4}>
+            <EventCard>
+              <CardActionArea onClick={() => handleEventClick(evento.id)}>
+                <CardMedia
+                  component="img"
+                  height="200"
+                  image={evento.fotos[0]} // Usa a primeira foto como capa
+                  alt={evento.nome}
+                  sx={{ objectFit: 'cover' }}
+                />
+                <CardContent>
+                  <Typography variant="h6" component="h3" gutterBottom>
+                    {evento.nome}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Data: {new Date(evento.data).toLocaleDateString()}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Local: {evento.local}
+                  </Typography>
+                  <Typography variant="body2" color="primary" sx={{ mt: 1 }}>
+                    Ver todas as fotos ({evento.fotos.length})
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+            </EventCard>
+          </Grid>
         ))}
-      </div>
-
-      {galerias.length === 0 && !loading && !error && (
-        <div className="text-center text-gray-500 mt-8">
-          Nenhuma galeria encontrada.
-        </div>
-      )}
-    </div>
+      </Grid>
+    </Container>
   );
 };
 
-export default GaleriaView;
+export default GaleriaEventos;

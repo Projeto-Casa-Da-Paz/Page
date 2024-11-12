@@ -1,6 +1,5 @@
-// src/app/eventos/galeria/[id]/EventoDetalhe.tsx
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Container,
     Typography,
@@ -10,6 +9,8 @@ import {
     Card,
     Modal,
     Fade,
+    CircularProgress,
+    Alert
 } from '@mui/material';
 import { ArrowBack, Close, ArrowForward, ArrowBackIos } from '@mui/icons-material';
 import { useRouter } from 'next/navigation';
@@ -18,24 +19,62 @@ interface EventoDetalheProps {
     id: string;
 }
 
+interface Galeria {
+    id: number;
+    nome: string;
+    data: string;
+    local: string;
+    qtd_fotos: number;
+    created_at: string;
+    updated_at: string;
+}
+
+interface Foto {
+    id: number;
+    id_galeria: number;
+    nome: string;
+    file: string;
+    created_at: string;
+    updated_at: string;
+}
+
 const EventoDetalhe = ({ id }: EventoDetalheProps) => {
     const router = useRouter();
     const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
+    const [galeria, setGaleria] = useState<Galeria | null>(null);
+    const [fotos, setFotos] = useState<Foto[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-    // Dados do evento (exemplo)
-    const evento = {
-        id: parseInt(id),
-        nome: "Evento Casa da Paz",
-        data: "2024-03-15",
-        local: "Casa da Paz",
-        descricao: "Descrição detalhada do evento...",
-        fotos: [
-            '/imagens/casa-da-paz-home.jpg',
-            '/imagens/casa-da-paz-home.jpg',
-            '/imagens/casa-da-paz-home.jpg',
-            '/imagens/casa-da-paz-home.jpg',
-        ]
-    };
+    useEffect(() => {
+        const fetchGaleriaEFotos = async () => {
+            try {
+                // Buscar dados da galeria
+                const galeriaResponse = await fetch(`http://127.0.0.1:8000/api/galerias/${id}`);
+                if (!galeriaResponse.ok) {
+                    throw new Error('Falha ao carregar os dados do evento');
+                }
+                const galeriaData = await galeriaResponse.json();
+                setGaleria(galeriaData);
+
+                // Buscar fotos da galeria
+                const fotosResponse = await fetch(`http://127.0.0.1:8000/api/galerias/${id}/fotos`);
+                if (!fotosResponse.ok) {
+                    throw new Error('Falha ao carregar as fotos do evento');
+                }
+                const fotosData = await fotosResponse.json();
+                setFotos(fotosData);
+
+                setError(null);
+            } catch (err) {
+                setError(err instanceof Error ? err.message : 'Erro ao carregar o evento');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchGaleriaEFotos();
+    }, [id]);
 
     const handleImageClick = (index: number) => {
         setSelectedImageIndex(index);
@@ -47,15 +86,31 @@ const EventoDetalhe = ({ id }: EventoDetalheProps) => {
 
     const handleNextImage = () => {
         if (selectedImageIndex !== null) {
-            setSelectedImageIndex((selectedImageIndex + 1) % evento.fotos.length);
+            setSelectedImageIndex((selectedImageIndex + 1) % fotos.length);
         }
     };
 
     const handlePreviousImage = () => {
         if (selectedImageIndex !== null) {
-            setSelectedImageIndex((selectedImageIndex - 1 + evento.fotos.length) % evento.fotos.length);
+            setSelectedImageIndex((selectedImageIndex - 1 + fotos.length) % fotos.length);
         }
     };
+
+    if (loading) {
+        return (
+            <Container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>
+                <CircularProgress />
+            </Container>
+        );
+    }
+
+    if (error || !galeria) {
+        return (
+            <Container sx={{ py: 4 }}>
+                <Alert severity="error">{error || 'Evento não encontrado'}</Alert>
+            </Container>
+        );
+    }
 
     return (
         <Container maxWidth="lg" sx={{ py: 4 }}>
@@ -65,21 +120,17 @@ const EventoDetalhe = ({ id }: EventoDetalheProps) => {
                 </IconButton>
                 <Box>
                     <Typography variant="h4" component="h1" gutterBottom>
-                        {evento.nome}
+                        {galeria.nome}
                     </Typography>
                     <Typography variant="subtitle1" color="text.secondary">
-                        {new Date(evento.data).toLocaleDateString()} - {evento.local}
+                        {new Date(galeria.data).toLocaleDateString()} - {galeria.local}
                     </Typography>
                 </Box>
             </Box>
 
-            <Typography variant="body1" sx={{ mb: 4 }}>
-                {evento.descricao}
-            </Typography>
-
             <Grid container spacing={2}>
-                {evento.fotos.map((foto, index) => (
-                    <Grid item xs={12} sm={6} md={4} key={index}>
+                {fotos.map((foto, index) => (
+                    <Grid item xs={12} sm={6} md={4} key={foto.id}>
                         <Card
                             onClick={() => handleImageClick(index)}
                             sx={{
@@ -92,8 +143,8 @@ const EventoDetalhe = ({ id }: EventoDetalheProps) => {
                         >
                             <Box
                                 component="img"
-                                src={foto}
-                                alt={`Foto ${index + 1} do ${evento.nome}`}
+                                src={foto.file}
+                                alt={`Foto ${index + 1} do ${galeria.nome}`}
                                 sx={{
                                     width: '100%',
                                     height: 250,
@@ -143,12 +194,12 @@ const EventoDetalhe = ({ id }: EventoDetalheProps) => {
                             <Close />
                         </IconButton>
 
-                        {selectedImageIndex !== null && (
+                        {selectedImageIndex !== null && fotos[selectedImageIndex] && (
                             <>
                                 <Box
                                     component="img"
-                                    src={evento.fotos[selectedImageIndex]}
-                                    alt="Foto em tamanho grande"
+                                    src={fotos[selectedImageIndex].file}
+                                    alt={`Foto ${selectedImageIndex + 1} do ${galeria.nome}`}
                                     sx={{
                                         width: '100%',
                                         height: 'auto',
@@ -159,7 +210,6 @@ const EventoDetalhe = ({ id }: EventoDetalheProps) => {
                                     }}
                                 />
 
-                                {/* Botão de imagem anterior */}
                                 <IconButton
                                     onClick={handlePreviousImage}
                                     sx={{
@@ -178,7 +228,6 @@ const EventoDetalhe = ({ id }: EventoDetalheProps) => {
                                     <ArrowBackIos />
                                 </IconButton>
 
-                                {/* Botão de próxima imagem */}
                                 <IconButton
                                     onClick={handleNextImage}
                                     sx={{

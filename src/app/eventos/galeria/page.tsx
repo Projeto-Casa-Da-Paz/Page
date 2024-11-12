@@ -1,6 +1,5 @@
-// GaleriaEventos.tsx
 "use client";
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Card,
   CardContent,
@@ -8,8 +7,8 @@ import {
   Typography,
   Grid,
   Container,
-  Box,
-  Button,
+  CircularProgress,
+  Alert,
   CardActionArea
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -20,7 +19,18 @@ interface Galeria {
   nome: string;
   data: string;
   local: string;
-  fotos: string[];
+  qtd_fotos: number;
+  created_at: string;
+  updated_at: string;
+}
+
+interface Foto {
+  id: number;
+  id_galeria: number;
+  nome: string;
+  file: string;
+  created_at: string;
+  updated_at: string;
 }
 
 const EventCard = styled(Card)(({ theme }) => ({
@@ -35,48 +45,74 @@ const EventCard = styled(Card)(({ theme }) => ({
 
 const GaleriaEventos = () => {
   const router = useRouter();
+  const [galerias, setGalerias] = useState<Galeria[]>([]);
+  const [fotosCapas, setFotosCapas] = useState<Record<number, string>>({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Dados de exemplo com múltiplas fotos por evento
-  const eventos: Galeria[] = [
-    {
-      id: 1,
-      nome: "Evento Casa da Paz",
-      data: "2024-03-15",
-      local: "Casa da Paz",
-      fotos: [
-        '/imagens/casa-da-paz-home.jpg',
-        '/imagens/casa-da-paz-home.jpg',
-        '/imagens/casa-da-paz-home.jpg',
-        '/imagens/casa-da-paz-home.jpg',
-        '/imagens/casa-da-paz-home.jpg',
-        '/imagens/casa-da-paz-home.jpg',
-      ]
-    },
-    {
-      id: 2,
-      nome: "Campanha Solidária",
-      data: "2024-03-20",
-      local: "Centro Comunitário",
-      fotos: [
-        '/imagens/casa-da-paz-home.jpg',
-        '/imagens/casa-da-paz-home.jpg',
-        '/imagens/casa-da-paz-home.jpg',
-        '/imagens/casa-da-paz-home.jpg',
-        '/imagens/casa-da-paz-home.jpg',
-        '/imagens/casa-da-paz-home.jpg',
-        '/imagens/casa-da-paz-home.jpg',
-        '/imagens/casa-da-paz-home.jpg',
-        '/imagens/casa-da-paz-home.jpg',
-        '/imagens/casa-da-paz-home.jpg',
-        '/imagens/casa-da-paz-home.jpg',
-      ]
-    },
-    // Adicione mais eventos conforme necessário
-  ];
+  useEffect(() => {
+    const fetchGalerias = async () => {
+      try {
+        // Buscar as galerias
+        const response = await fetch('http://127.0.0.1:8000/api/galerias');
+        if (!response.ok) {
+          throw new Error('Falha ao carregar os eventos');
+        }
+        const galeriasData = await response.json();
+        setGalerias(galeriasData);
 
-  const handleEventClick = (eventoId: number) => {
-    router.push(`/eventos/galeria/${eventoId}`);
+        // Buscar a primeira foto de cada galeria para usar como capa
+        const capas: Record<number, string> = {};
+        for (const galeria of galeriasData) {
+          try {
+            const fotosResponse = await fetch(`http://127.0.0.1:8000/api/galerias/${galeria.id}/fotos`);
+            if (fotosResponse.ok) {
+              const fotosData = await fotosResponse.json();
+              if (fotosData && fotosData.length > 0) {
+                // Assumindo que a API retorna o caminho completo da imagem
+                capas[galeria.id] = fotosData[0].file;
+              }
+            }
+          } catch (error) {
+            console.error(`Erro ao buscar fotos da galeria ${galeria.id}:`, error);
+          }
+        }
+        setFotosCapas(capas);
+        setError(null);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Erro ao carregar os eventos');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchGalerias();
+  }, []);
+
+  const handleEventClick = (galeriaId: number) => {
+    router.push(`/eventos/galeria/${galeriaId}`);
   };
+
+  // Função para obter a imagem de capa da galeria
+  const getEventImage = (galeriaId: number) => {
+    return fotosCapas[galeriaId] || '/imagens/default-event-image.jpg';
+  };
+
+  if (loading) {
+    return (
+      <Container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>
+        <CircularProgress />
+      </Container>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container sx={{ py: 4 }}>
+        <Alert severity="error">{error}</Alert>
+      </Container>
+    );
+  }
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
@@ -85,29 +121,29 @@ const GaleriaEventos = () => {
       </Typography>
 
       <Grid container spacing={3}>
-        {eventos.map((evento) => (
-          <Grid item key={evento.id} xs={12} sm={6} md={4}>
+        {galerias.map((galeria) => (
+          <Grid item key={galeria.id} xs={12} sm={6} md={4}>
             <EventCard>
-              <CardActionArea onClick={() => handleEventClick(evento.id)}>
+              <CardActionArea onClick={() => handleEventClick(galeria.id)}>
                 <CardMedia
                   component="img"
                   height="200"
-                  image={evento.fotos[0]} // Usa a primeira foto como capa
-                  alt={evento.nome}
+                  image={getEventImage(galeria.id)}
+                  alt={galeria.nome}
                   sx={{ objectFit: 'cover' }}
                 />
                 <CardContent>
                   <Typography variant="h6" component="h3" gutterBottom>
-                    {evento.nome}
+                    {galeria.nome}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    Data: {new Date(evento.data).toLocaleDateString()}
+                    Data: {new Date(galeria.data).toLocaleDateString()}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    Local: {evento.local}
+                    Local: {galeria.local}
                   </Typography>
                   <Typography variant="body2" color="primary" sx={{ mt: 1 }}>
-                    Ver todas as fotos ({evento.fotos.length})
+                    Ver todas as fotos ({galeria.qtd_fotos})
                   </Typography>
                 </CardContent>
               </CardActionArea>

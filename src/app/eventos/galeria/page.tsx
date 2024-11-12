@@ -75,7 +75,7 @@ const GaleriaEventos = () => {
   ];
 
   const handleEventClick = (eventoId: number) => {
-    router.push(`/eventos/${eventoId}`);
+    router.push(`/eventos/galeria/${eventoId}`);
   };
 
   return (

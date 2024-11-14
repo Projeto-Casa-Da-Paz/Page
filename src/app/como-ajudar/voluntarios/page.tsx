@@ -16,23 +16,26 @@ import {
 
 interface IVoluntario {
   nome: string;
-  email: string;
+  idade: string;
   telefone: string;
-  data_nascimento: string;
+  areaAtuacao: string;
+  endereco: string;
 }
 
 interface IErrors {
   nome?: string;
-  email?: string;
+  idade?: string;
   telefone?: string;
-  data_nascimento?: string;
+  areaAtuacao?: string;
+  endereco?: string;
 }
 
 const defaultVoluntario: IVoluntario = {
   nome: '',
-  email: '',
+  idade: '',
   telefone: '',
-  data_nascimento: ''
+  areaAtuacao: '',
+  endereco: ''
 };
 
 export default function Voluntarios() {
@@ -51,18 +54,20 @@ export default function Voluntarios() {
       newErrors.nome = 'Por favor, informe seu nome';
     }
 
-    if (!formData.email.trim()) {
-      newErrors.email = 'Por favor, informe seu email';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Por favor, informe um email válido';
+    if (!formData.idade.trim()) {
+      newErrors.idade = 'Por favor, informe sua idade';
     }
 
     if (!formData.telefone.trim()) {
       newErrors.telefone = 'Por favor, informe seu telefone';
     }
 
-    if (!formData.data_nascimento) {
-      newErrors.data_nascimento = 'Por favor, informe sua data de nascimento';
+    if (!formData.areaAtuacao.trim()) {
+      newErrors.areaAtuacao = 'Por favor, informe sua área de atuação';
+    }
+
+    if (!formData.endereco.trim()) {
+      newErrors.endereco = 'Por favor, informe seu endereço';
     }
 
     setErrors(newErrors);
@@ -74,7 +79,7 @@ export default function Voluntarios() {
 
     if (validateForm()) {
       try {
-        const response = await fetch('http://localhost:3001/voluntarios', {
+        const response = await fetch('http://127.0.0.1:8000/api/voluntarios', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -165,13 +170,13 @@ export default function Voluntarios() {
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
-                label="Seu E-mail"
-                name="email"
-                type="email"
-                value={formData.email}
+                label="Sua Idade"
+                name="idade"
+                type="number"
+                value={formData.idade}
                 onChange={handleChange}
-                error={!!errors.email}
-                helperText={errors.email}
+                error={!!errors.idade}
+                helperText={errors.idade}
                 required
                 InputProps={{
                   sx: { borderRadius: 2 }
@@ -197,16 +202,27 @@ export default function Voluntarios() {
             <Grid item xs={12}>
               <TextField
                 fullWidth
-                label="Data de Nascimento"
-                name="data_nascimento"
-                type="date"
-                value={formData.data_nascimento}
+                label="Área de Atuação"
+                name="areaAtuacao"
+                value={formData.areaAtuacao}
                 onChange={handleChange}
-                error={!!errors.data_nascimento}
-                helperText={errors.data_nascimento}
-                InputLabelProps={{
-                  shrink: true,
+                error={!!errors.areaAtuacao}
+                helperText={errors.areaAtuacao}
+                required
+                InputProps={{
+                  sx: { borderRadius: 2 }
                 }}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Endereço"
+                name="endereco"
+                value={formData.endereco}
+                onChange={handleChange}
+                error={!!errors.endereco}
+                helperText={errors.endereco}
                 required
                 InputProps={{
                   sx: { borderRadius: 2 }

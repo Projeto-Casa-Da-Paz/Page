@@ -1,12 +1,62 @@
 "use client";
 
+import { useState } from 'react';
 import {
-  Container, Typography, Box, Paper, Divider
+  Container, Typography, Box, Paper, Divider, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField
 } from '@mui/material';
 import { QRCodeSVG } from 'qrcode.react';
 import Image from 'next/image';
+import axios from 'axios';
 
 export default function Doacoes() {
+  const [openModal, setOpenModal] = useState(false);
+  const [confirmationData, setConfirmationData] = useState({
+    nome: '',
+    email: '',
+    valor: '',
+    comprovante: null
+  });
+
+  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
+
+  const handleChangeConfirmation = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, files } = e.target;
+    setConfirmationData({
+      ...confirmationData,
+      [name]: files ? files[0] : value
+    });
+  };
+
+  const handleSubmit = async () => {
+    const formData = new FormData();
+
+    formData.append('nome', confirmationData.nome);
+    formData.append('email', confirmationData.email);
+    formData.append('valor', confirmationData.valor);
+
+    // Se houver um comprovante, adiciona ao FormData
+    if (confirmationData.comprovante) {
+      formData.append('comprovante', confirmationData.comprovante);
+    }
+
+    try {
+      const response = await axios.post('http://127.0.0.1:8000/api/doacoes', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        }
+      });
+
+      if (response.status === 200) {
+        alert('Doação registrada com sucesso!');
+        setOpenModal(false); // Fecha o modal
+      }
+    } catch (error) {
+      console.error('Erro ao enviar doação', error);
+      alert('Ocorreu um erro ao enviar a doação.');
+    }
+  };
+
   const dadosDoacao = {
     nome: "Associação Assistencial e Promocional Casa da Paz",
     pix: "05.509.404/0001-29",
@@ -21,7 +71,6 @@ export default function Doacoes() {
 
   return (
     <Container maxWidth="lg" sx={{ maxWidth: '100vh', mt: 0, mb: 4 }}>
-
       <Box sx={{
         display: 'flex',
         justifyContent: 'center',
@@ -106,6 +155,63 @@ export default function Doacoes() {
           </Box>
         </Paper>
       </Box>
+
+      {/* Botão para Confirmar a Doação */}
+      <Box sx={{ textAlign: 'center', mt: 4 }}>
+        <Button variant="contained" color="primary" onClick={handleOpenModal}>
+          Confirmar Doação
+        </Button>
+      </Box>
+
+      {/* Modal de Confirmação */}
+      <Dialog open={openModal} onClose={handleCloseModal}>
+        <DialogTitle>Confirmar Doação</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Insira seus dados e, se desejar, anexe o comprovante de doação.
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Nome"
+            name="nome"
+            fullWidth
+            value={confirmationData.nome}
+            onChange={handleChangeConfirmation}
+          />
+          <TextField
+            margin="dense"
+            label="E-mail"
+            name="email"
+            type="email"
+            fullWidth
+            value={confirmationData.email}
+            onChange={handleChangeConfirmation}
+          />
+          <TextField
+            margin="dense"
+            label="Valor da Doação"
+            name="valor"
+            type="number"
+            fullWidth
+            value={confirmationData.valor}
+            onChange={handleChangeConfirmation}
+          />
+          <TextField
+            margin="dense"
+            label="Comprovante (opcional)"
+            name="comprovante"
+            type="file"
+            fullWidth
+            onChange={handleChangeConfirmation}
+            InputLabelProps={{ shrink: true }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseModal} color="secondary">Cancelar</Button>
+          <Button onClick={handleSubmit} color="primary">Enviar Confirmação</Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 }

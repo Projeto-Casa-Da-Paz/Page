@@ -55,7 +55,7 @@ const PremiosCertificados = () => {
             <Grid display="flex" justifyContent="center" alignItems="center" key={premio.id} sx={{ gap: 5 }} size={{ md: 4, sm: 12, xs: 4 }}>
               <CardContent sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 2, textAlign: 'center' }} >
                 <img
-                  src={"http://127.0.0.1:8000/api/imagem/"+premio.imagem}
+                  src={"http://127.0.0.1:8000/api/imagem/" + premio.imagem}
                   alt={premio.nome}
                   style={{
                     width: '100%',

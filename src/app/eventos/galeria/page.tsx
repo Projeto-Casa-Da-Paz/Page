@@ -53,7 +53,7 @@ const GaleriaEventos = () => {
   useEffect(() => {
     const fetchGalerias = async () => {
       try {
-        // Buscar as galerias
+
         const response = await fetch('http://127.0.0.1:8000/api/galerias');
         if (!response.ok) {
           throw new Error('Falha ao carregar os eventos');
@@ -61,7 +61,6 @@ const GaleriaEventos = () => {
         const galeriasData = await response.json();
         setGalerias(galeriasData);
 
-        // Buscar a primeira foto de cada galeria para usar como capa
         const capas: Record<number, string> = {};
         for (const galeria of galeriasData) {
           try {
@@ -69,7 +68,6 @@ const GaleriaEventos = () => {
             if (fotosResponse.ok) {
               const fotosData = await fotosResponse.json();
               if (fotosData && fotosData.length > 0) {
-                // Assumindo que a API retorna o caminho completo da imagem
                 capas[galeria.id] = fotosData[0].file;
               }
             }
@@ -93,7 +91,6 @@ const GaleriaEventos = () => {
     router.push(`/eventos/galeria/${galeriaId}`);
   };
 
-  // Função para obter a imagem de capa da galeria
   const getEventImage = (galeriaId: number) => {
     return fotosCapas[galeriaId] || '/imagens/default-event-image.jpg';
   };

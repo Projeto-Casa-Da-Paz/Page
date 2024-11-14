@@ -1,8 +1,18 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import { Box, Card, CardContent, Typography } from '@mui/material';
-import Grid from "@mui/material/Grid2"; // Grid v2
+import React, { useEffect, useState } from 'react';
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+  Grid,
+  Container,
+  CircularProgress,
+  Alert,
+  CardActionArea
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
 
 interface Premio {
   id: number;
@@ -11,6 +21,16 @@ interface Premio {
   data_recebimento: string;
   imagem: string;
 }
+
+const PremioCard = styled(Card)(({ theme }) => ({
+  height: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  transition: 'transform 0.2s',
+  '&:hover': {
+    transform: 'scale(1.02)',
+  },
+}));
 
 const PremiosCertificados = () => {
   const [premios, setPremios] = useState<Premio[]>([]);
@@ -24,10 +44,10 @@ const PremiosCertificados = () => {
         if (!response.ok) {
           throw new Error('Erro ao carregar os prêmios');
         }
-        const data = await response.json() as Premio[];
+        const data = await response.json();
         setPremios(data);
+        setError(null);
       } catch (error) {
-        // Tratamento adequado do erro com type narrowing
         if (error instanceof Error) {
           setError(error.message);
         } else {
@@ -41,45 +61,57 @@ const PremiosCertificados = () => {
     fetchPremios();
   }, []);
 
-  if (loading) return <Typography>Carregando...</Typography>;
-  if (error) return <Typography color="error">{error}</Typography>;
+  if (loading) {
+    return (
+      <Container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>
+        <CircularProgress />
+      </Container>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container sx={{ py: 4 }}>
+        <Alert severity="error">{error}</Alert>
+      </Container>
+    );
+  }
 
   return (
-    <>
-      <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column" gap={2} sx={{ mt: 4 }} >
-        <Typography variant="h3" component="h1" gutterBottom>
-          Premios e Certificados
-        </Typography>
-        <Grid container spacing={{ xs: 2, md: 2 }} columns={{ xs: 4, sm: 8, md: 12 }} >
-          {premios.map((premio: Premio) => (
-            <Grid display="flex" justifyContent="center" alignItems="center" key={premio.id} sx={{ gap: 5 }} size={{ md: 4, sm: 12, xs: 4 }}>
-              <CardContent sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 2, textAlign: 'center' }} >
-                <img
-                  src={"http://127.0.0.1:8000/api/imagem/" + premio.imagem}
-                  alt={premio.nome}
-                  style={{
-                    width: '100%',
-                    height: 'auto',
-                    maxHeight: '200px',
-                    objectFit: 'contain'
-                  }}
-                />
-                <Typography variant="h6" component="h2">
-                  {premio.nome}
-                </Typography>
-                <Typography color="textSecondary">
-                  Categoria: {premio.categoria}
-                </Typography>
-                <Typography variant="body2">
-                  Data de Recebimento: {new Date(premio.data_recebimento).toLocaleDateString('pt-BR')}
-                </Typography>
-              </CardContent>
-            </Grid>
-          ))}
-        </Grid>
-      </Box>
+    <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Typography variant="h4" component="h2" gutterBottom sx={{ mb: 4 }}>
+        Prêmios e Certificados
+      </Typography>
 
-    </>
+      <Grid container spacing={3}>
+        {premios.map((premio) => (
+          <Grid item key={premio.id} xs={12} sm={6} md={4}>
+            <PremioCard>
+              <CardActionArea>
+                <CardMedia
+                  component="img"
+                  height="200"
+                  image={`http://127.0.0.1:8000/api/imagem/${premio.imagem}`}
+                  alt={premio.nome}
+                  sx={{ objectFit: 'contain' }}
+                />
+                <CardContent>
+                  <Typography variant="h6" component="h3" gutterBottom>
+                    {premio.nome}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Categoria: {premio.categoria}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Data de Recebimento: {new Date(premio.data_recebimento).toLocaleDateString('pt-BR')}
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+            </PremioCard>
+          </Grid>
+        ))}
+      </Grid>
+    </Container>
   );
 };
 

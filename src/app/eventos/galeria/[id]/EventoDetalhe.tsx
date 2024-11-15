@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import { ArrowBack, Close, ArrowForward, ArrowBackIos } from '@mui/icons-material';
 import { useRouter } from 'next/navigation';
+import axios from 'axios';
 
 interface EventoDetalheProps {
     id: string;
@@ -47,34 +48,34 @@ const EventoDetalhe = ({ id }: EventoDetalheProps) => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        const fetchGaleriaEFotos = async () => {
+        const fetchGaleria = async () => {
             try {
-                // Buscar dados da galeria
-                const galeriaResponse = await fetch(`http://127.0.0.1:8000/api/galerias/${id}`);
-                if (!galeriaResponse.ok) {
-                    throw new Error('Falha ao carregar os dados do evento');
-                }
-                const galeriaData = await galeriaResponse.json();
+                const { data: galeriaData } = await axios.get<Galeria>(`http://127.0.0.1:8000/api/galerias/${id}`);
                 setGaleria(galeriaData);
-
-                // Buscar fotos da galeria
-                const fotosResponse = await fetch(`http://127.0.0.1:8000/api/galerias/${id}/fotos`);
-                if (!fotosResponse.ok) {
-                    throw new Error('Falha ao carregar as fotos do evento');
-                }
-                const fotosData = await fotosResponse.json();
-                setFotos(fotosData);
-
-                setError(null);
+                setLoading(false);
             } catch (err) {
+                console.log('[fetchGaleria] Erro ao carregar o evento:', err);
                 setError(err instanceof Error ? err.message : 'Erro ao carregar o evento');
-            } finally {
                 setLoading(false);
             }
         };
 
-        fetchGaleriaEFotos();
-    }, [id]);
+        const fetchFotos = async () => {
+            try {
+                const { data: fotosData } = await axios.get<Foto[]>(`http://127.0.0.1:8000/api/galerias/${id}/fotos`);
+                setFotos(fotosData);
+                setLoading(false);
+            } catch (err) {
+                console.log('[fetchFotos] Erro ao carregar as fotos do evento:', err);
+                setError(err instanceof Error ? err.message : 'Erro ao carregar as fotos do evento');
+                setLoading(false);
+            }
+        };
+
+        fetchGaleria().then(() => fetchFotos()).catch(() => {
+            setLoading(false);
+        });
+    }, [id, loading, error, fotos, galeria]);
 
     const handleImageClick = (index: number) => {
         setSelectedImageIndex(index);
@@ -143,7 +144,7 @@ const EventoDetalhe = ({ id }: EventoDetalheProps) => {
                         >
                             <Box
                                 component="img"
-                                src={foto.file}
+                                src={`http://127.0.0.1:8000/api/imagem/${foto.nome}`}
                                 alt={`Foto ${index + 1} do ${galeria.nome}`}
                                 sx={{
                                     width: '100%',
@@ -198,7 +199,7 @@ const EventoDetalhe = ({ id }: EventoDetalheProps) => {
                             <>
                                 <Box
                                     component="img"
-                                    src={fotos[selectedImageIndex].file}
+                                    src={`http://127.0.0.1:8000/api/imagem/${fotos[selectedImageIndex].nome}`}
                                     alt={`Foto ${selectedImageIndex + 1} do ${galeria.nome}`}
                                     sx={{
                                         width: '100%',

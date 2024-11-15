@@ -154,14 +154,14 @@ export default function Doacoes() {
         </Grid>
       </Grid>
 
-      {/* Botão para Confirmar a Doação */}
+      {/* Botão para Confirmar a Doação 
       <Box sx={{ textAlign: 'center', mt: 4 }}>
         <Button variant="contained" color="primary" onClick={handleOpenModal}>
           Confirmar Doação
         </Button>
-      </Box>
+      </Box> */}
 
-      {/* Modal de Confirmação */}
+      {/* Modal de Confirmação 
       <Dialog open={openModal} onClose={handleCloseModal}>
         <DialogTitle>Confirmar Doação</DialogTitle>
         <DialogContent>
@@ -209,7 +209,7 @@ export default function Doacoes() {
           <Button onClick={handleCloseModal} color="secondary">Cancelar</Button>
           <Button onClick={handleSubmit} color="primary">Enviar Confirmação</Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
     </Container>
   );
 }

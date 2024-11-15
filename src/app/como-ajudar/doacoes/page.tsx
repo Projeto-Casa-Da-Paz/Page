@@ -34,8 +34,7 @@ export default function Doacoes() {
     formData.append('nome', confirmationData.nome);
     formData.append('email', confirmationData.email);
     formData.append('valor', confirmationData.valor);
-
-    // Se houver um comprovante, adiciona ao FormData
+    
     if (confirmationData.comprovante) {
       formData.append('comprovante', confirmationData.comprovante);
     }

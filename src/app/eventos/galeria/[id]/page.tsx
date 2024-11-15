@@ -22,6 +22,6 @@ export async function generateStaticParams() {
         }));
     } catch (error) {
         console.error('Erro ao gerar parâmetros estáticos:', error);
-        return []; // Retorna array vazio em caso de erro
+        return [];
     }
 }

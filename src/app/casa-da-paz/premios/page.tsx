@@ -91,7 +91,10 @@ const PremiosCertificados = () => {
                 <CardMedia
                   component="img"
                   height="200"
-                  image={`http://127.0.0.1:8000/api/imagem/${premio.imagem}`}
+
+                  // Route::get('/imagem/{dirname}/{filename}', [ImagemController::class, 'showImage']);
+
+                  image={`http://127.0.0.1:8000/api/imagem/premios/${premio.imagem}`}
                   alt={premio.nome}
                   sx={{ objectFit: 'contain' }}
                 />

@@ -36,4 +36,8 @@ yarn-error.log*
 next-env.d.ts
 
 # Ignorar pasta de imagens da galeria
-public/
+public/colaboradores
+public/fotos
+public/parceiros
+public/premios
+public/uploads

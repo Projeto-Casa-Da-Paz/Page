@@ -106,9 +106,6 @@ const GaleriaEventos = () => {
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Typography variant="h4" component="h2" gutterBottom sx={{ mb: 4 }}>
-        Galeria de Eventos
-      </Typography>
 
       <Grid container spacing={3}>
         {galerias.map((galeria) => (

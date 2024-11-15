@@ -46,7 +46,6 @@ const EventCard = styled(Card)(({ theme }) => ({
 const GaleriaEventos = () => {
   const router = useRouter();
   const [galerias, setGalerias] = useState<Galeria[]>([]);
-  const [fotosCapas, setFotosCapas] = useState<Record<number, string>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -75,8 +74,6 @@ const GaleriaEventos = () => {
             console.error(`Erro ao buscar fotos da galeria ${galeria.id}:`, error);
           }
         }
-        setFotosCapas(capas);
-        setError(null);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Erro ao carregar os eventos');
       } finally {
@@ -89,10 +86,6 @@ const GaleriaEventos = () => {
 
   const handleEventClick = (galeriaId: number) => {
     router.push(`/eventos/galeria/${galeriaId}`);
-  };
-
-  const getEventImage = (galeriaId: number) => {
-    return fotosCapas[galeriaId] || '/imagens/default-event-image.jpg';
   };
 
   if (loading) {
@@ -122,13 +115,6 @@ const GaleriaEventos = () => {
           <Grid item key={galeria.id} xs={12} sm={6} md={4}>
             <EventCard>
               <CardActionArea onClick={() => handleEventClick(galeria.id)}>
-                <CardMedia
-                  component="img"
-                  height="200"
-                  image={getEventImage(galeria.id)}
-                  alt={galeria.nome}
-                  sx={{ objectFit: 'cover' }}
-                />
                 <CardContent>
                   <Typography variant="h6" component="h3" gutterBottom>
                     {galeria.nome}

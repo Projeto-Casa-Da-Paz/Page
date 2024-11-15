@@ -22,7 +22,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const navigationItems = [
-  { text: 'Home', href: '/' },
+  { text: 'Inicio', href: '/' },
   {
     text: 'Casa da Paz',
     submenu: [
@@ -42,6 +42,14 @@ const navigationItems = [
     submenu: [
       { text: 'Bazar', href: '/eventos/bazar' },
       { text: 'Galeria', href: '/eventos/galeria' },
+    ]
+  },
+  {
+    text: 'Sobre',
+    submenu: [
+      { text: 'Documentos', href: '/sobre/documentos' },
+      { text: 'História', href: '/sobre/historia' },
+      { text: 'Parceiros', href: '/sobre/parceiros' },
     ]
   }
 ];

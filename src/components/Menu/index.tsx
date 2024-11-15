@@ -46,7 +46,7 @@ export const Menu = () => {
                         } */}
 
                         <NavbarLinkExtended href={'/'}>
-                            Home
+                            Início
                         </NavbarLinkExtended>
 
                         <NavbarLinkExtended href={'/'}>

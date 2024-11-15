@@ -9,18 +9,19 @@ export default function Home() {
 
   return (
 
-    <Box textAlign="center" justifyContent="center" sx={{ p: 3 }} >
-      <Typography variant="h3" component="h1" gutterBottom sx={{ mt: 2 }}>
-        Bem-vindo à Casa da Paz
-      </Typography>
+    <Box textAlign="center" justifyContent="center" sx={{ padding: { xs: 2, sm: 3, md: 4 } }}>
 
       <Box position="relative" width="100%" height={{ xs: '300px', md: '450px' }} mb={3}>
         <Image
-          src="/imagens/casa-da-paz-home.jpg"
-          alt="Home Casa da Paz"
-          fill
-          style={{ objectFit: 'cover', borderRadius: '8px' }}
+          src="/home-casa-da-paz.jpg"
+          alt="Instituição Casa da Paz, em Umuarama, Paraná"
+          width={1200} // largura padrão para desktop
+          height={600} // altura proporcional
+          layout="responsive"
+          style={{ borderRadius: '8px' }}
+
         />
+
       </Box>
 
       <Typography variant="body1">
@@ -33,6 +34,7 @@ export default function Home() {
           color="primary"
           onClick={() => router.push('/como-ajudar/doacoes')}
           sx={{ mt: 2 }}
+          aria-label="Ir para página de doações"
         >
           Faça uma Doação
         </Button>
@@ -42,9 +44,11 @@ export default function Home() {
           color="primary"
           onClick={() => router.push('/como-ajudar/voluntarios')}
           sx={{ mt: 2 }}
+          aria-label="Ir para página de voluntários"
         >
           Seja um voluntário
         </Button>
+
       </Box>
     </Box>
   );

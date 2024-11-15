@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import {
-  Container, Typography, Box, Paper, Divider, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField
+  Container, Typography, Box, Paper, Divider, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Grid
 } from '@mui/material';
 import { QRCodeSVG } from 'qrcode.react';
 import Image from 'next/image';
@@ -70,14 +70,14 @@ export default function Doacoes() {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ maxWidth: '100vh', mt: 0, mb: 4 }}>
+    <Container maxWidth="lg" sx={{ maxWidth: '100%', mt: 0, mb: 4 }}>
       <Box sx={{
         display: 'flex',
         justifyContent: 'center',
         mb: 4
       }}>
         <Image
-          src="/imagens/logo-casa-da-paz.png"
+          src="/logo-casa-da-paz.png"
           alt="Logo Casa da Paz"
           width={300}
           height={150}
@@ -100,61 +100,59 @@ export default function Doacoes() {
         </Typography>
       </Box>
 
-      <Box sx={{
-        display: 'flex',
-        flexDirection: { xs: 'column', md: 'row' },
-        gap: 3,
-        justifyContent: 'center',
-        my: 4
-      }}>
-        <Paper elevation={3} sx={{ p: 4, maxWidth: 400, width: '100%' }}>
-          <Typography variant="h6" gutterBottom align="center">
-            Faça sua doação via PIX
-          </Typography>
+      <Grid container spacing={3} sx={{ my: 4 }} justifyContent="center">
+        <Grid item xs={12} sm={6} md={4}>
+          <Paper elevation={3} sx={{ p: 4, width: '100%' }}>
+            <Typography variant="h6" gutterBottom align="center">
+              Faça sua doação via PIX
+            </Typography>
 
-          <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
-            <QRCodeSVG
-              value={dadosDoacao.pix}
-              size={200}
-              level="H"
-            />
-          </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+              <QRCodeSVG
+                value={dadosDoacao.pix}
+                size={200}
+                level="H"
+              />
+            </Box>
 
-          <Typography variant="body1" align="center">
-            <strong>Chave PIX:</strong> {dadosDoacao.pix}
-          </Typography>
-        </Paper>
+            <Typography variant="body1" align="center">
+              <strong>Chave PIX:</strong> {dadosDoacao.pix}
+            </Typography>
+          </Paper>
+        </Grid>
 
-        <Paper elevation={3} sx={{ p: 4, maxWidth: 400, width: '100%' }}>
-          <Typography variant="h6" gutterBottom align="center">
-            Dados Bancários
-          </Typography>
+        <Grid item xs={12} sm={6} md={4}>
+          <Paper elevation={3} sx={{ p: 4, width: '100%' }}>
+            <Typography variant="h6" gutterBottom align="center">
+              Dados Bancários
+            </Typography>
 
-          <Box sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 1.5,
-            mt: 2
-          }}>
-            <Typography variant="body1">
-              <strong>Banco:</strong> {dadosDoacao.banco.nome} ({dadosDoacao.banco.codigo})
-            </Typography>
-            <Typography variant="body1">
-              <strong>Agência:</strong> {dadosDoacao.banco.agencia}
-            </Typography>
-            <Typography variant="body1">
-              <strong>Conta Corrente:</strong> {dadosDoacao.banco.conta}
-            </Typography>
-            <Divider sx={{ my: 1 }} />
-            <Typography variant="body1">
-              <strong>Titular:</strong> {dadosDoacao.nome}
-            </Typography>
-            <Typography variant="body1">
-              <strong>CNPJ:</strong> {dadosDoacao.banco.cnpj}
-            </Typography>
-          </Box>
-        </Paper>
-      </Box>
+            <Box sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 1.5,
+              mt: 2
+            }}>
+              <Typography variant="body1">
+                <strong>Banco:</strong> {dadosDoacao.banco.nome} ({dadosDoacao.banco.codigo})
+              </Typography>
+              <Typography variant="body1">
+                <strong>Agência:</strong> {dadosDoacao.banco.agencia}
+              </Typography>
+              <Typography variant="body1">
+                <strong>Conta Corrente:</strong> {dadosDoacao.banco.conta}
+              </Typography>
+              <Divider sx={{ my: 1 }} />
+              <Typography variant="body1">
+                <strong>Titular:</strong> {dadosDoacao.nome}
+              </Typography>
+              <Typography variant="body1">
+                <strong>CNPJ:</strong> {dadosDoacao.banco.cnpj}
+              </Typography>
+            </Box>
+          </Paper>
+        </Grid>
+      </Grid>
 
       {/* Botão para Confirmar a Doação */}
       <Box sx={{ textAlign: 'center', mt: 4 }}>

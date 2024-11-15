@@ -47,7 +47,6 @@ const navigationItems = [
   {
     text: 'Sobre',
     submenu: [
-      { text: 'Documentos', href: '/sobre/documentos' },
       { text: 'História', href: '/sobre/historia' },
       { text: 'Parceiros', href: '/sobre/parceiros' },
     ]

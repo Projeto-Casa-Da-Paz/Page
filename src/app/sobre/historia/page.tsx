@@ -54,11 +54,11 @@ export default function Historia() {
                     </Typography>
 
                     <Typography variant="body1" paragraph>
-                        <strong>MVV: </strong> {historia.MVV}
+                        <strong>MISSÃO | VISÃO | VALORES : </strong> {historia.MVV}
                     </Typography>
 
                     <Typography variant="body1" paragraph>
-                        <strong>PMH: </strong> {historia.PMH}
+                        <strong>PRINCIPAIS MARCOS HISTÓRICOS: </strong> {historia.PMH}
                     </Typography>
 
                     <Typography variant="body1" paragraph>

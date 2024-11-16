@@ -25,23 +25,14 @@ export default function Parcerias() {
         <Container maxWidth="lg" sx={{ mt: 4 }}>
             {parceiros.length > 0 ? (
                 <Paper elevation={3} sx={{ p: 4 }}>
-                    <Typography variant="h4" component="h1" gutterBottom>
-                        Parcerias
-                    </Typography>
-                    <Typography variant="body1" paragraph>
-                        Parceiros Casa da Paz
-                    </Typography>
-
                     <Grid container spacing={3}>
                         {parceiros.map((parceiro) => (
                             <Grid item xs={12} sm={6} md={4} key={parceiro.id}>
                                 <Paper elevation={3} sx={{ p: 2, textAlign: 'center' }}>
-                                    <Image
-                                        src={`/imagens/${parceiro.imagem}`}
+                                    <img
+                                        src={`http://127.0.0.1:8000/api/imagem/${parceiro.imagem}`}
                                         alt={parceiro.nome}
-                                        width={300}
-                                        height={200}
-                                        style={{ objectFit: 'contain' }}
+                                        style={{ width: "100%", height: "auto" }}
                                     />
                                     <Typography variant="h6" sx={{ mt: 2 }}>
                                         {parceiro.nome}

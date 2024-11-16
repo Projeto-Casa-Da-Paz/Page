@@ -35,9 +35,6 @@ export default function Parcerias() {
         <Container maxWidth="lg" sx={{ mt: 4 }}>
             {colaboradores.length > 0 ? (
                 <Paper elevation={3} sx={{ p: 4 }}>
-                    <Typography variant="h4" component="h1" gutterBottom>
-                        Colaboradores
-                    </Typography>
                     <Typography variant="body1" paragraph>
                         Conheça nossos Colaboradores
                     </Typography>
@@ -46,13 +43,13 @@ export default function Parcerias() {
                         {colaboradores.map((colaborador) => (
                             <Grid item xs={12} sm={6} md={4} key={colaborador.id}>
                                 <Paper elevation={3} sx={{ p: 2, textAlign: "center" }}>
-                                    <Image
-                                        src={`/colaboradores`}
+
+                                    <img
+                                        src={`http://127.0.0.1:8000/api/imagem/${colaborador.foto}`}
                                         alt={colaborador.nome}
-                                        width={300}
-                                        height={200}
-                                        style={{ objectFit: "contain" }}
+                                        style={{ width: "100%", height: "auto" }}
                                     />
+
                                     <Typography variant="h6" sx={{ mt: 2 }}>
                                         {colaborador.nome}
                                     </Typography>

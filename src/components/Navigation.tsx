@@ -49,7 +49,7 @@ const navigationItems = [
     submenu: [
       { text: 'História', href: '/sobre/historia' },
       { text: 'Parceiros', href: '/sobre/parceiros' },
-      { text: 'Colaboradores', href: 'sobre/colaboradores'}
+      { text: 'Colaboradores', href: '/sobre/colaboradores'}
     ]
   }
 ];

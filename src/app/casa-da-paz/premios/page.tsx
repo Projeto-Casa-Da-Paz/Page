@@ -79,10 +79,6 @@ const PremiosCertificados = () => {
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Typography variant="h4" component="h2" gutterBottom sx={{ mb: 4 }}>
-        Prêmios e Certificados
-      </Typography>
-
       <Grid container spacing={3}>
         {premios.map((premio) => (
           <Grid item key={premio.id} xs={12} sm={6} md={4}>

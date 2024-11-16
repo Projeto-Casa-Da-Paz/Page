@@ -33,15 +33,7 @@ export default function BazarBeneficente() {
             justifyContent: 'center',
             mb: 4
           }}>
-            <Image
-              src='/hoje.jpg'	
-              // src={`/imagens/${bazar.foto}`}
-              alt="Logo Casa da Paz"
-              width={300}
-              height={150}
-              style={{ objectFit: 'contain' }}
-              priority
-            />
+            
           </Box>
 
           <Typography variant="h4" component="h1" gutterBottom align="center" color="primary">

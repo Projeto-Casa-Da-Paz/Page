@@ -24,9 +24,9 @@ Você pode acessar a organização completa do projeto no [GitHub da Casa da Paz
 
 Este projeto foi desenvolvido com dedicação por:
 
-- [Daniel Oliveira](https://github.com/danielsz3) - Frontend Developer
-- [Felipe Gustavo](https://github.com/devfelipegustavo) - Backend Developer
-- [João Gabryel](https://github.com/JoaoGabryel) - Frontend Developer
+- [Daniel Oliveira](https://github.com/danielsz3)
+- [Felipe Gustavo](https://github.com/devfelipegustavo)
+- [João Gabryel](https://github.com/JoaoGabryel)
 
 ### 🎯 Objetivos do Site
 - Apresentar a instituição e sua missão

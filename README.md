@@ -120,7 +120,7 @@ Este projeto é privado e destinado exclusivamente para uso da Associação Casa
 
 ## 📞 Suporte
 
-Para suporte e mais informações sobre o projeto, entre em contato através de [inserir contato] ou abra uma issue em qualquer um dos repositórios do projeto.
+Para suporte e mais informações sobre o projeto, entre em contato através de [@danielsz3](https://github.com/danielsz3), [@devfelipegustavo](https://github.com/devfelipegustavo) ou [@JoaoGabryel](https://github.com/JoaoGabryel) ou abra uma issue em qualquer um dos repositórios do projeto.
 
 ---
 

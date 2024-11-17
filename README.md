@@ -1,3 +1,9 @@
+<!-- Versão mais simples -->
+![Next JS](https://img.shields.io/badge/-NextJS-000000?style=flat&logo=next.js&logoColor=white)
+
+<!-- Versão com fundo branco -->
+![Next JS](https://img.shields.io/badge/-NextJS-FFFFFF?style=flat&logo=next.js&logoColor=000000)
+
 # Casa da Paz - Website Institucional
 
 ![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)

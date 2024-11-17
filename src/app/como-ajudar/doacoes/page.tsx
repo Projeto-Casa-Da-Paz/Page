@@ -7,17 +7,25 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
+interface DadosDoacao {
+  banco: string;
+  agencia: string;
+  conta_corrente: string;
+  cnpj: string;
+  titular: string;
+  chave_pix: string;
+}
+
 export default function Doacoes() {
-  const [dadosDoacao, setDadosDoacao] = useState(null);
+  const [dadosDoacao, setDadosDoacao] = useState<DadosDoacao | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchDadosDoacao() {
       try {
         const response = await axios.get('http://127.0.0.1:8000/api/doacoes');
-        // Verifica se o retorno é um array ou um objeto
         const data = Array.isArray(response.data) ? response.data[0] : response.data;
-        setDadosDoacao(data); // Ajuste conforme o formato retornado
+        setDadosDoacao(data);
       } catch (error) {
         console.error("Erro ao buscar dados da API:", error);
       } finally {
@@ -32,11 +40,18 @@ export default function Doacoes() {
   }
 
   if (!dadosDoacao) {
-    return <Typography align="center" sx={{ mt: 4, color: 'red' }}>Erro ao carregar dados da doação.</Typography>;
+    return <Typography
+      align="center"
+      sx={{
+        mt: 4,
+        color: 'red'
+      }}>Erro ao carregar dados da doação.
+    </Typography>;
   }
 
   return (
     <Container maxWidth="lg" sx={{ mt: 2, mb: 4 }}>
+
       <Box sx={{
         display: 'flex',
         justifyContent: 'center',
@@ -52,7 +67,12 @@ export default function Doacoes() {
         />
       </Box>
 
-      <Typography variant="h4" component="h1" gutterBottom align="center" color="primary">
+      <Typography
+        variant="h4"
+        component="h1"
+        gutterBottom
+        align="center"
+        color="primary">
         Seja um Doador
       </Typography>
 
@@ -60,10 +80,12 @@ export default function Doacoes() {
         <Typography variant="h6" gutterBottom>
           Faça a diferença na vida de muitas pessoas!
         </Typography>
+
         <Typography variant="body1" paragraph>
           A Instituição Casa da Paz precisa de pessoas como você, que desejam
           contribuir para um mundo melhor. Junte-se a nós nessa missão!
         </Typography>
+
       </Box>
 
       <Box sx={{
@@ -73,12 +95,30 @@ export default function Doacoes() {
         justifyContent: 'center',
         my: 4
       }}>
-        <Paper elevation={3} sx={{ p: 4, maxWidth: 400, width: '100%' }}>
+
+        <Paper
+          elevation={3}
+          sx={{
+            p: 4,
+            maxWidth: 400,
+            width:
+            {
+              xs: '90%',
+              md: '100%'
+            },
+            margin: '0 auto'
+          }}>
+
           <Typography variant="h6" gutterBottom align="center">
             Faça sua doação via PIX
           </Typography>
 
-          <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              mb: 2
+            }}>
             <Image
               src="/qrcodepix.png"
               alt="QR CODE PIX"
@@ -91,9 +131,22 @@ export default function Doacoes() {
           <Typography variant="body1" align="center">
             <strong>Chave PIX:</strong> {dadosDoacao.chave_pix}
           </Typography>
+
         </Paper>
 
-        <Paper elevation={3} sx={{ p: 4, maxWidth: 400, width: '100%' }}>
+        <Paper
+          elevation={3}
+          sx={{
+            p: 4,
+            maxWidth: 400,
+            width:
+            {
+              xs: '90%',
+              md: '100%'
+            },
+            margin: '0 auto'
+          }}>
+
           <Typography variant="h6" gutterBottom align="center">
             Dados Bancários
           </Typography>

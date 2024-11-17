@@ -14,22 +14,23 @@ export default function Home() {
         <Image
           src="/home-casa-da-paz.jpg"
           alt="Instituição Casa da Paz, em Umuarama, Paraná"
-          layout="fill" 
+          layout="fill"
           objectFit="cover"
           style={{ borderRadius: '8px' }}
         />
 
-        {/* Conteúdo sobre a imagem */}
         <Box
           position="absolute"
           top="50%"
           left="50%"
-          transform="translate(-50%, -50%)"
           sx={{
             color: 'white',
             textAlign: 'center',
             padding: 2,
             maxWidth: '90%',
+            transform: 'translate(-50%, -50%)',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)', // Adiciona fundo semitransparente
+            borderRadius: '8px', // Adiciona borda arredondada ao fundo
           }}
         >
           <Typography variant="h4" sx={{ mb: 2 }}>

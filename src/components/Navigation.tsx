@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   AppBar,
   Box,
@@ -49,7 +49,7 @@ const navigationItems = [
     submenu: [
       { text: 'História', href: '/sobre/historia' },
       { text: 'Parceiros', href: '/sobre/parceiros' },
-      { text: 'Colaboradores', href: '/sobre/colaboradores'}
+      { text: 'Colaboradores', href: '/sobre/colaboradores' }
     ]
   }
 ];
@@ -62,19 +62,19 @@ export default function Navigation() {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const pathname = usePathname();
 
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
+  const handleDrawerToggle = useCallback(() => {
+    setMobileOpen(prev => !prev);
+  }, []);
 
-  const handleSubMenuOpen = (event: React.MouseEvent<HTMLElement>, itemText: string) => {
+  const handleSubMenuOpen = useCallback((event: React.MouseEvent<HTMLElement>, itemText: string) => {
     setAnchorEl(event.currentTarget);
     setOpenSubMenu(itemText);
-  };
+  }, []);
 
-  const handleSubMenuClose = () => {
+  const handleSubMenuClose = useCallback(() => {
     setAnchorEl(null);
     setOpenSubMenu(null);
-  };
+  }, []);
 
   const drawer = (
     <List>
@@ -82,8 +82,7 @@ export default function Navigation() {
         item.submenu ? (
           <React.Fragment key={item.text}>
             <ListItem
-              onMouseEnter={(e) => handleSubMenuOpen(e, item.text)}
-              onMouseLeave={handleSubMenuClose}
+              onClick={(e) => handleSubMenuOpen(e, item.text)}
             >
               <ListItemText primary={item.text} />
             </ListItem>
@@ -148,7 +147,7 @@ export default function Navigation() {
                 item.submenu ? (
                   <div
                     key={item.text}
-                    onMouseEnter={(e) => handleSubMenuOpen(e, item.text)}
+                    onClick={(e) => handleSubMenuOpen(e, item.text)}
                     onMouseLeave={handleSubMenuClose}
                   >
                     <Button

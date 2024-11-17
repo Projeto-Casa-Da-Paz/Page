@@ -1,76 +1,44 @@
 "use client"
-import { LeftContainer, NavbarContainer, NavbarInnerContainer, NavbarLinkExtended, RightContainer } from "./styles"
-import { useEffect, useState } from "react"
-import axios from "axios"
-
-interface ICategoria {
-    id: number;
-    nome: string;
-}
+import {
+    LeftContainer,
+    NavbarContainer,
+    NavbarInnerContainer,
+    NavbarLinkExtended,
+    RightContainer
+} from "./styles"
 
 export const Menu = () => {
 
-    const [categorias, setCategorias] = useState<Array<ICategoria>>([])
-
-    useEffect(() => {
-        axios.get('http://localhost:3001/categorias')
-            .then((resposta) => {
-                setCategorias(resposta.data)
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-    }, [])
-
     return (
-        <>
-            <NavbarContainer>
-                <NavbarInnerContainer>
-                    <LeftContainer>
+        <NavbarContainer>
+            <NavbarInnerContainer>
+                <LeftContainer>
 
-                    </LeftContainer>
+                </LeftContainer>
 
-                    <RightContainer>
+                <RightContainer>
+                    <NavbarLinkExtended href={'/'}>
+                        Início
+                    </NavbarLinkExtended>
 
-                        {/* Como Fazer linkagem para a página desejada */}
-                        {/* { </NavbarLinkExtended>
-                            {
-                            categorias.map((categoria) => (
-                                <NavbarLinkExtended
-                                    key={categoria.id}
-                                    href={'/categoria/' + categoria.id}
-                                >
-                                    {categoria.nome}
-                                </NavbarLinkExtended>
-                            ))
-                        } */}
+                    <NavbarLinkExtended href={'/'}>
+                        Sobre Nós
+                    </NavbarLinkExtended>
 
-                        <NavbarLinkExtended href={'/'}>
-                            Início
-                        </NavbarLinkExtended>
+                    <NavbarLinkExtended href={'/'}>
+                        Como Ajudar
+                    </NavbarLinkExtended>
 
-                        <NavbarLinkExtended href={'/'}>
-                            Sobre Nós
-                        </NavbarLinkExtended>
+                    <NavbarLinkExtended href={'/'}>
+                        Eventos
+                    </NavbarLinkExtended>
 
-                        <NavbarLinkExtended href={'/'}>
-                            Como Ajudar
-                        </NavbarLinkExtended>
+                    <NavbarLinkExtended href={'/'}>
+                        A Casa Da Paz
+                    </NavbarLinkExtended>
+                </RightContainer>
 
-                        <NavbarLinkExtended href={'/'}>
-                            Eventos
-                        </NavbarLinkExtended>
-
-                        <NavbarLinkExtended href={'/'}>
-                            A Casa Da Paz
-                        </NavbarLinkExtended>
-
-                    </RightContainer>
-
-                </NavbarInnerContainer>
-
-            </NavbarContainer>
-
-        </>
+            </NavbarInnerContainer>
+        </NavbarContainer>
     )
 }

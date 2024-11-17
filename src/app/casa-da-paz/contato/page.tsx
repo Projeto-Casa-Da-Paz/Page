@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useEffect, useState } from 'react';
 import {
   Card,
@@ -10,6 +11,7 @@ import {
   Alert,
   CardActionArea
 } from '@mui/material';
+
 import { styled } from '@mui/material/styles';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
@@ -55,8 +57,8 @@ const iconMapping = {
   Twitter: { icon: TwitterIcon, color: "#1DA1F2" },
   Whatsapp: { icon: WhatsAppIcon, color: "#25D366" },
   WhatsappBazar: { icon: WhatsAppIcon, color: "#25D366" },
-  Sede: { icon: LocationOnIcon, color: "#black" },
-  SedeBazar: { icon: LocationOnIcon, color: "#black" },
+  Sede: { icon: LocationOnIcon, color: "#000" },
+  SedeBazar: { icon: LocationOnIcon, color: "#000" },
 } as const;
 
 const RedesSociais = () => {
@@ -65,61 +67,40 @@ const RedesSociais = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://127.0.0.1:8000/api';
+  const API_BASE_URL =
+    process.env.NEXT_PUBLIC_API_BASE_URL || 'http://127.0.0.1:8000/api';
 
   useEffect(() => {
-    const fetchRedesSociais = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/instituicoes/1/redes-sociais/`);
-        if (!response.ok) {
-          throw new Error(`Falha ao carregar as redes sociais: ${response.status}`);
+        const redesResponse = await fetch(`${API_BASE_URL}/instituicoes/1/redes-sociais/`);
+        const addressesResponse = await fetch(`${API_BASE_URL}/instituicoes/1/enderecos`);
+
+        if (!redesResponse.ok || !addressesResponse.ok) {
+          throw new Error('Erro ao carregar os dados');
         }
-        const data = await response.json();
-        setRedes(data);
+
+        setRedes(await redesResponse.json());
+        setAddresses(await addressesResponse.json());
         setError(null);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Erro ao carregar as redes sociais');
+        setError(err instanceof Error ? err.message : 'Erro ao carregar os dados');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchRedesSociais();
-  }, [API_BASE_URL]);
-
-  useEffect(() => {
-    const fetchAddressData = async () => {
-      try {
-        const response = await fetch(`${API_BASE_URL}/instituicoes/1/enderecos`);
-        if (!response.ok) {
-          throw new Error(`Falha ao carregar os endereços: ${response.status}`);
-        }
-        const data = await response.json();
-        setAddresses(data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    fetchAddressData();
+    fetchData();
   }, [API_BASE_URL]);
 
   const getSocialUrl = (rede: RedeSocial) => {
-    if (rede.url.startsWith('http')) {
-      return rede.url;
-    }
-    switch (rede.tipo) {
-      case 'Instagram':
-        return `https://instagram.com/${rede.url.replace('@', '')}`;
-      case 'Facebook':
-        return `https://facebook.com/${rede.url.replace('@', '')}`;
-      case 'Whatsapp':
-        return `https://wa.me/${rede.url.replace(/[^0-9]/g, '')}`;
-      case 'WhatsappBazar':
-        return `https://wa.me/${rede.url.replace(/[^0-9]/g, '')}`;
-      default:
-        return rede.url;
-    }
+    if (rede.url.startsWith('http')) return rede.url;
+    const mappings = {
+      Instagram: `https://instagram.com/${rede.url.replace('@', '')}`,
+      Facebook: `https://facebook.com/${rede.url.replace('@', '')}`,
+      Whatsapp: `https://wa.me/${rede.url.replace(/[^0-9]/g, '')}`,
+    };
+    return mappings[rede.tipo as keyof typeof mappings] || rede.url;
   };
 
   if (loading) {
@@ -131,11 +112,7 @@ const RedesSociais = () => {
   }
 
   if (error) {
-    return (
-      <Container sx={{ py: 4 }}>
-        <Alert severity="error">{error}</Alert>
-      </Container>
-    );
+    return <Container sx={{ py: 4 }}><Alert severity="error">{error}</Alert></Container>;
   }
 
   return (
@@ -147,27 +124,21 @@ const RedesSociais = () => {
 
           return (
             <Grid item key={rede.id} xs={12} sm={6} md={4}>
-              <SocialCard>
+              <SocialCard sx={{ backgroundColor: `${color}10` }}>
                 <CardActionArea
                   href={getSocialUrl(rede)}
                   target="_blank"
                   rel="noopener noreferrer"
+                  sx={{ height: '100%' }}
                 >
-                  <CardContent
-                    sx={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      gap: 2,
-                      padding: 3,
-                    }}
-                  >
+                  <CardContent sx={{ textAlign: 'center', p: 3 }}>
                     <Icon
                       sx={{
                         fontSize: 80,
-                        color: 'text.primary',
-                        transition: 'color 0.3s ease',
-                        '&:hover': { color },
+                        color,
+                        mb: 2,
+                        transition: 'transform 0.3s ease',
+                        '&:hover': { transform: 'scale(1.1)' },
                       }}
                     />
                     <Typography variant="h6" component="h2" gutterBottom>
@@ -185,40 +156,38 @@ const RedesSociais = () => {
 
         {addresses.map((address) => (
           <Grid item key={address.id} xs={12} sm={6} md={4}>
-            <SocialCard>
+            <SocialCard sx={{ backgroundColor: '#F0F0F0' }}>
+
               <CardActionArea
-                href={`https://www.google.com/maps?q=${address.logradouro},${address.numero},${address.bairro},${address.cidade},${address.estado}`}
+                href={`https://www.google.com/maps?q=
+                  ${address.logradouro}, 
+                  ${address.numero}, 
+                  ${address.bairro}, 
+                  ${address.cidade}, 
+                  ${address.estado}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <CardContent
-                  sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: 2,
-                    padding: 3,
-                  }}
-                >
-                  <LocationOnIcon
-                    sx={{
-                      fontSize: 80,
-                      color: iconMapping['Sede'].color,
-                    }}
-                  />
+                <CardContent sx={{ textAlign: 'center', p: 3 }}>
+                  <LocationOnIcon sx={{ fontSize: 80, color: '#000', mb: 2 }} />
+
                   <Typography variant="h6" component="h2" gutterBottom>
                     {address.local}
                   </Typography>
+
                   <Typography variant="body2" color="text.secondary">
-                    {`${address.logradouro}, ${address.numero} - ${address.bairro}, ${address.cidade}/${address.estado}`}
+                    {`${address.logradouro}, 
+                    ${address.numero} - 
+                    ${address.bairro}, 
+                    ${address.cidade}/
+                    ${address.estado}`}
                   </Typography>
+
                 </CardContent>
               </CardActionArea>
             </SocialCard>
           </Grid>
         ))}
-
-
       </Grid>
     </Container>
   );

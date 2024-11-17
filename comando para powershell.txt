@@ -1,3 +1,0 @@
-comando para powershell
-
-cd 'C:\Users\danie\OneDrive\Documentos\Facul\4º SEMESTRE\PROF. MATHEUS\Projeto de Extensão\Projeto-Casa-Da-Paz\Rep Page\Page\'

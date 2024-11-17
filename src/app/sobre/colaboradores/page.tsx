@@ -35,8 +35,9 @@ export default function Parcerias() {
         <Container maxWidth="lg" sx={{ mt: 4 }}>
             {colaboradores.length > 0 ? (
                 <Paper elevation={3} sx={{ p: 4 }}>
-                    <Typography variant="body1" paragraph>
-                        Conheça nossos Colaboradores
+
+                    <Typography variant="h5" paragraph>
+                        Conheça nossos Colaboradores:
                     </Typography>
 
                     <Grid container spacing={3}>
@@ -53,24 +54,30 @@ export default function Parcerias() {
                                     <Typography variant="h6" sx={{ mt: 2 }}>
                                         {colaborador.nome}
                                     </Typography>
+
                                     <Typography variant="body2" color="textSecondary">
                                         Profissão: {colaborador.profissao}
                                     </Typography>
+
                                     <Typography variant="body2" color="textSecondary">
                                         Classificação: {colaborador.classificacao}
                                     </Typography>
+
                                     <Typography variant="body2" color="textSecondary">
                                         Desde: {new Date(colaborador.created_at).toLocaleDateString()}
                                     </Typography>
+
                                 </Paper>
                             </Grid>
                         ))}
                     </Grid>
                 </Paper>
             ) : (
+
                 <Typography variant="h6" align="center">
                     Carregando colaboradores...
                 </Typography>
+
             )}
         </Container>
     );
